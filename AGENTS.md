@@ -119,10 +119,90 @@ AI harus berhenti dan meminta keputusan jika:
 - Perubahan membutuhkan credential atau akses eksternal.
 - Kebutuhan fitur tidak jelas dan pilihan desain mengubah arsitektur utama.
 
-## Aturan Git
+## Aturan Git — Dua Branch
+
+Proyek singkat ini hanya menggunakan dua branch permanen:
+
+```text
+main        → versi stabil untuk demo/pengumpulan
+              ↑
+development → integrasi seluruh pekerjaan tim
+```
+
+### Aturan branch
+
+1. `main` hanya berisi kode yang sudah diuji dan layak didemonstrasikan.
+2. Semua pekerjaan harian dilakukan pada `development`.
+3. Anggota tidak membuat branch fitur tambahan untuk task kecil.
+4. Jika perubahan besar berisiko memecahkan integrasi, buat branch sementara hanya atas persetujuan tim; branch tersebut dihapus setelah digabungkan.
+5. Jangan bekerja langsung di `main`.
+6. `development` boleh berisi beberapa commit pekerjaan, tetapi harus dapat dikompilasi sebelum digabungkan ke `main`.
+
+### Alur kerja normal
+
+```bash
+git switch development
+git pull origin development
+# kerjakan perubahan
+git status
+git diff --check
+# jalankan compile/test
+git add <file-yang-sudah-diperiksa>
+git commit -m "type: ringkasan perubahan"
+git push origin development
+```
+
+Setelah milestone selesai:
+
+```bash
+git switch main
+git pull origin main
+git merge --no-ff development
+git push origin main
+git switch development
+```
+
+### Aturan merge `development` ke `main`
+
+- Hanya dilakukan setelah compile/test berhasil.
+- Pastikan `CHANGELOG.md` sudah mencatat perubahan dan hasil pengujian.
+- Pastikan `git diff --check` bersih.
+- Gunakan merge commit agar batas milestone mudah dilacak.
+- Jangan melakukan merge jika ada konflik yang belum diselesaikan dan diverifikasi.
+
+### Aturan commit dan push
 
 1. Periksa `git status` sebelum dan sesudah perubahan.
 2. Stage file secara eksplisit; jangan menggunakan `git add -A` tanpa memeriksa daftar file.
-3. Gunakan pesan commit yang jelas dan berbentuk imperative/conventional commit jika diminta.
-4. Jangan mengklaim push berhasil tanpa output push atau verifikasi remote.
-5. Jangan melakukan force push, reset destruktif, atau `git clean` tanpa persetujuan eksplisit.
+3. Gunakan pesan commit Conventional Commits, misalnya `feat:`, `fix:`, `docs:`, atau `test:`.
+4. Satu commit sebaiknya mewakili satu perubahan logis.
+5. Push pekerjaan biasa ke `development`, bukan `main`.
+6. Jangan mengklaim push berhasil tanpa output push atau verifikasi remote.
+7. Jangan melakukan force push, reset destruktif, atau `git clean` tanpa persetujuan eksplisit.
+8. Jangan mengubah riwayat `main` setelah dipakai untuk demo/pengumpulan.
+9. Jangan commit credential, token, API key, password, file hasil build, atau file IDE pribadi.
+10. Jika remote branch belum tersedia, buat dengan `git push -u origin development` setelah branch lokal diverifikasi.
+
+### Aturan konflik
+
+1. Jangan memilih `ours` atau `theirs` secara otomatis.
+2. Baca konflik, cek kontrak di `docs/`, lalu gabungkan secara manual.
+3. Jalankan compile/test setelah konflik diselesaikan.
+4. Catat konflik penting dan keputusan penyelesaiannya di `CHANGELOG.md`.
+5. Jangan menghapus pekerjaan anggota lain untuk menghilangkan konflik.
+
+### Pemeriksaan sebelum merge ke `main`
+
+```text
+[ ] development sudah up to date
+[ ] source code dapat dikompilasi
+[ ] pengujian relevan berhasil
+[ ] CHANGELOG.md sudah diperbarui
+[ ] docs/ dan source code konsisten
+[ ] git diff --check bersih
+[ ] tidak ada credential atau file sampah
+```
+
+## Aturan Git Tambahan
+
+Aturan umum tetap berlaku: perubahan harus dapat dilacak, tidak destruktif, dan status push harus diverifikasi dari output Git.

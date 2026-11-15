@@ -6,6 +6,20 @@ Format versi mengikuti tahap pengerjaan proyek, bukan klaim rilis produk.
 
 ## [Unreleased]
 
+### 2026-11-15 — Aturan Git dua branch
+
+#### Changed
+
+- Menambahkan aturan penggunaan dua branch permanen: `development` dan `main`.
+- Menetapkan `development` sebagai branch pekerjaan dan integrasi.
+- Menetapkan `main` sebagai branch stabil untuk demo atau pengumpulan.
+- Menambahkan aturan commit, push, merge, konflik, dan pemeriksaan sebelum merge.
+
+#### Tests
+
+- `git diff --check` akan dijalankan sebelum commit.
+- Belum ada pengujian Java karena source code Java belum tersedia.
+
 ### 2026-11-15 — Task guide dan aturan AI
 
 #### Added
