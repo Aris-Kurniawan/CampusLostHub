@@ -6,6 +6,20 @@ Format versi mengikuti tahap pengerjaan proyek, bukan klaim rilis produk.
 
 ## [Unreleased]
 
+### 2026-11-15 — View, Main, dan Claimant (Intan)
+
+#### Added
+- `model/Claimant.java`
+- `Main.java`
+- `view/ConsoleView.java`, `view/MainFrame.java`, `view/InputValidator.java`, `view/TableFormatter.java`, `view/ViewUtil.java`
+- `docs/TEST_SCENARIOS.md`
+
+#### Tests
+- Compile belum dijalankan karena `LostAndFoundManager` dan `InvalidClaimException` dari Bilu belum tersedia.
+
+#### Notes
+- Nama method pada `LostAndFoundManager` masih asumsi dan perlu dicocokkan dengan Bilu.
+
 ### 2026-11-15 — Modul belajar lokal Aris
 
 #### Added
