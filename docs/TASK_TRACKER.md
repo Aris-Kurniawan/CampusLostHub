@@ -1,104 +1,300 @@
-# Task Tracker & Jadwal Sprint 4 Minggu — CampusLostHub
+# Task Guide Mingguan — CampusLostHub
 
-Dokumen pelacakan tugas ini memetakan milestone dan target progres per minggu sesuai instruksi resmi Final Project PBO.
+Dokumen ini memetakan instruksi Final Project PBO menjadi tugas yang dapat dilaporkan setiap minggu.
 
----
+## Identitas Proyek
 
-## Ringkasan Milestone 4 Minggu
+- **Judul:** Smart Campus Lost & Found Hub
+- **Nama aplikasi:** CampusLostHub
+- **Bahasa:** Java
+- **Tim:** Kelompok 7
+- **Anggota:** Aris Kurniawan, Sabilu Rosyada (Bilu), Intan Kusumaningarum
+- **Durasi:** 4 minggu
 
-```text
-[Minggu 1: Selesai] ➔ Analisis Kebutuhan, Desain UML & Arsitektur Kelas
-[Minggu 2: Antrean] ➔ Implementasi Core OOP (Model, Interface, Hierarchy, & Unit Test)
-[Minggu 3: Antrean] ➔ Service Layer, ArrayList, File Handling CSV, & UI View
-[Minggu 4: Antrean] ➔ Pengujian Komprehensif, Video Demo, & Laporan Akhir
-```
+## Aturan Pelaporan
 
----
+Setiap akhir minggu, perbarui:
 
-## 1. Minggu 1 — Analisis dan Perancangan Sistem (Target: Hari Ini)
+1. Checklist tugas yang selesai.
+2. Bukti file, commit, screenshot, atau hasil pengujian.
+3. Kendala yang ditemukan.
+4. Rencana perbaikan minggu berikutnya.
+5. `CHANGELOG.md` untuk setiap perubahan repository.
 
-- [x] Menentukan judul proyek dan studi kasus domain kampus (`Smart Campus Lost & Found Hub`).
-- [x] Mengidentifikasi 3 akar permasalahan utama (fragmentasi info, ketiadaan inventaris, verifikasi lemah).
-- [x] Menentukan kebutuhan fungsional aplikasi (FR-01 s/d FR-09).
-- [x] Menentukan 3 aktor sistem dan merumuskan 4 alur proses bisnis.
-- [x] Menyusun UML Use Case Diagram lengkap dengan relasi `<<include>>`.
-- [x] Menyusun UML Class Diagram lengkap memenuhi 9 kriteria PBO.
-- [x] Menentukan pembagian peran adil dan seimbang untuk 3 mahasiswa.
-- [x] Menyusun dokumen laporan kemajuan Minggu 1 (`Kelompok7_Final Project Minggu 1.docx`).
-- [x] Inisialisasi struktur repositori dan dokumentasi teknis (`SPECIFICATION.md`, `ARCHITECTURE.md`, `CONTRACTS_AND_CSV.md`).
+Status yang digunakan:
 
----
-
-## 2. Minggu 2 — Implementasi Konsep OOP (Target Minggu Depan)
-
-Fokus pengerjaan: Arsitektur kelas inti di package `id.ac.pens.psdku.campuslosthub.model` dan `contract`.
-
-- [ ] **Interface `Verifiable`:**
-  - [ ] Deklarasi method `boolean verifyClaim(String proofData)`.
-- [ ] **Abstract Class `Item`:**
-  - [ ] Deklarasi atribut private (`id`, `nama`, `deskripsi`, `lokasiDitemukan`, `tanggalDitemukan`, `status`).
-  - [ ] Implementasi constructor berparameter dengan validasi.
-  - [ ] Implementasi getter dan setter untuk setiap atribut.
-  - [ ] Deklarasi abstract methods: `getKategori()`, `displayInfo()`, `toCsvString()`.
-- [ ] **Subclass `BarangElektronik`:**
-  - [ ] Deklarasi atribut private `nomorSeri` dan `brand`.
-  - [ ] Implementasi constructor dengan `super(...)`.
-  - [ ] Implementasi method overriding `verifyClaim(proofData)`.
-  - [ ] Implementasi method overriding `displayInfo()` dan `toCsvString()`.
-- [ ] **Subclass `BarangDokumen`:**
-  - [ ] Deklarasi atribut private `nomorIdentitas` dan `namaPemilik`.
-  - [ ] Implementasi constructor dengan `super(...)`.
-  - [ ] Implementasi method overriding `verifyClaim(proofData)`.
-  - [ ] Implementasi method overriding `displayInfo()` dan `toCsvString()`.
-- [ ] **Class `Claimant`:**
-  - [ ] Deklarasi atribut private `nim`, `nama`, `noHp`.
-  - [ ] Implementasi getter dan method `getDetail()`.
-- [ ] **Custom Exception Classes:**
-  - [ ] `ItemNotFoundException.java`
-  - [ ] `InvalidClaimException.java`
+- `[ ]` Belum dikerjakan.
+- `[~]` Sedang dikerjakan.
+- `[x]` Selesai dan memiliki bukti.
+- `[!]` Terhambat atau membutuhkan keputusan.
 
 ---
 
-## 3. Minggu 3 — Pengembangan dan Integrasi Sistem
+## Minggu 1 — Analisis dan Perancangan Sistem
 
-Fokus pengerjaan: Logika bisnis, manipulasi `ArrayList`, File I/O CSV, dan Antarmuka Pengguna.
+**Target resmi:** Dokumen analisis kebutuhan dan desain sistem.
 
-- [ ] **Service Layer (`LostAndFoundService.java`):**
-  - [ ] Inisialisasi `ArrayList<Item> daftarBarang`.
-  - [ ] Method `tambahBarang(Item item)`.
-  - [ ] Method `getSemuaBarang()` dan `getBarangAktif()`.
-  - [ ] Method `cariBarang(String keyword)` (case-insensitive substring match).
-  - [ ] Method `filterByLokasi(String lokasi)`.
-  - [ ] Method `prosesKlaim(String id, String bukti, Claimant claimant)` dengan exception handling.
-  - [ ] Method `selesaikanKlaim(String id)`.
-- [ ] **File Handling CSV (`CsvStorage.java` / Service Persistence):**
-  - [ ] Implementasi `simpanKeFile()` menggunakan `BufferedWriter` / `FileWriter`.
-  - [ ] Implementasi `muatDariFile()` menggunakan `BufferedReader` / `FileReader` dengan parsing CSV.
-  - [ ] Penanganan fallback otomatis jika berkas CSV belum ada di direktori `data/`.
-- [ ] **User Interface (`Main.java` / `ConsoleView.java`):**
-  - [ ] Menu interaktif berbasis teks dengan navigasi angka yang rapi.
-  - [ ] Form input pelaporan barang baru dengan validasi data kosong.
-  - [ ] Tampilan katalog dalam bentuk tabel konsol bergaris rapi.
-  - [ ] Form klaim kepemilikan dan verifikasi bukti.
-  - [ ] Opsi integrasi GUI Java Swing sederhana jika waktu mencukupi.
+### Tugas tim
+
+- [x] Menentukan judul dan studi kasus.
+- [x] Menjelaskan masalah barang hilang/temuan di lingkungan kampus.
+- [x] Menentukan tujuan dan batasan aplikasi.
+- [x] Menentukan kebutuhan fungsional.
+- [x] Menentukan tiga aktor: Finder, Claimant, dan Petugas/Administrator.
+- [x] Menjelaskan proses pelaporan barang.
+- [x] Menjelaskan proses pencarian dan filter.
+- [x] Menjelaskan proses verifikasi klaim.
+- [x] Menjelaskan proses serah terima fisik.
+- [x] Membuat UML Use Case Diagram.
+- [x] Membuat UML Class Diagram.
+- [x] Menentukan pembagian tugas anggota.
+- [x] Menyusun laporan Minggu 1.
+- [x] Menentukan struktur modular repository.
+
+### Pembagian tugas
+
+#### Aris — Lead Architect & Core OOP
+
+- [x] Menentukan rancangan domain `Item`.
+- [x] Menentukan `BarangElektronik` dan `BarangDokumen`.
+- [x] Menentukan interface `Verifiable`.
+- [x] Menyusun UML Use Case dan Class Diagram.
+- [x] Mendokumentasikan relasi inheritance, realization, aggregation, dan dependency.
+
+#### Bilu — Data Persistence & Exception
+
+- [x] Menentukan kebutuhan `ArrayList<Item>`.
+- [x] Menentukan format CSV.
+- [x] Menentukan kebutuhan `LostAndFoundManager`.
+- [x] Menentukan kebutuhan custom exception dan validasi data.
+
+#### Intan — UI Controller & QA Tester
+
+- [x] Menentukan alur menu aplikasi.
+- [x] Menentukan kebutuhan input `Claimant`.
+- [x] Menentukan skenario pengujian awal.
+- [x] Menentukan kebutuhan dokumentasi demo.
+
+### Bukti
+
+- `docs/SPECIFICATION.md`
+- `docs/ARCHITECTURE.md`
+- `docs/CONTRACTS_AND_CSV.md`
+- `docs/ROLE_ARIS.md`
+- `docs/ROLE_BILU.md`
+- `docs/ROLE_INTAN.md`
+- `Kelompok7_Final Project Minggu 1.docx`
+
+### Laporan akhir Minggu 1
+
+- **Sudah dilakukan:** Analisis kebutuhan, desain UML, pembagian role, format CSV, dan struktur modular.
+- **Kendala:** Source code Java belum diimplementasikan.
+- **Next step:** Mulai implementasi kontrak dan model inti.
 
 ---
 
-## 4. Minggu 4 — Pengujian, Video Demo, dan Finalisasi
+## Minggu 2 — Implementasi Konsep OOP
 
-Fokus pengerjaan: Validasi fungsional, pembuatan media demonstrasi, dan penyusunan laporan akhir.
+**Target resmi:** Source code inti dengan penerapan konsep OOP.
 
-- [ ] **Skenario Pengujian (Testing Matrix):**
-  - [ ] Uji input normal & validasi kesalahan input.
-  - [ ] Uji verifikasi klaim lolos (bukti cocok).
-  - [ ] Uji verifikasi klaim ditolak (bukti salah / `InvalidClaimException`).
-  - [ ] Uji persistensi data (tutup aplikasi lalu jalankan kembali, data tetap tersimpan).
-- [ ] **Penyelesaian Laporan Akhir Final Project (BAB I s/d BAB V):**
-  - [ ] BAB III: Implementasi kode program per kelas.
-  - [ ] BAB IV: Tangkapan layar hasil pengujian tiap skenario.
-  - [ ] BAB V: Kesimpulan dan saran pengembangan sistem.
-- [ ] **Produksi Video Demonstrasi Aplikasi (5–10 Menit):**
-  - [ ] Perkenalan tim dan pembagian tugas.
-  - [ ] Demonstrasi alur pelaporan, pencarian, dan verifikasi klaim.
-  - [ ] Penjelasan implementasi 4 pilar OOP langsung pada source code.
-- [ ] **Persiapan Presentasi & Sesi Tanya Jawab Dosen.**
+### Tugas tim
+
+- [ ] Membuat project Java yang dapat dikompilasi.
+- [ ] Membuat package modular sesuai `src/id/ac/pens/psdku/campuslosthub/`.
+- [ ] Membuat minimal lima class yang saling berinteraksi.
+- [ ] Membuat constructor berparameter.
+- [ ] Menerapkan atribut private dan getter/setter sesuai kebutuhan.
+- [ ] Menerapkan inheritance.
+- [ ] Menerapkan polymorphism melalui overriding/interface.
+- [ ] Menerapkan abstraction melalui abstract class/interface.
+- [ ] Mengimplementasikan logika domain dasar.
+- [ ] Membuat self-check atau test kecil untuk model inti.
+
+### Tugas Aris
+
+- [ ] Membuat `contract/Verifiable.java`.
+- [ ] Membuat abstract class `model/Item.java`.
+- [ ] Membuat `model/BarangElektronik.java`.
+- [ ] Membuat `model/BarangDokumen.java`.
+- [ ] Menetapkan konstanta status dan aturan transisi.
+- [ ] Mengimplementasikan `verifyClaim(String proofData)` secara polimorfik.
+- [ ] Mengimplementasikan `getKategori()`, `displayInfo()`, dan `toCsvString()`.
+- [ ] Memastikan seluruh field model teren kapsulasi.
+- [ ] Memperbarui UML jika struktur implementasi berubah.
+
+### Tugas Bilu
+
+- [ ] Membuat `exception/ItemNotFoundException.java`.
+- [ ] Membuat `exception/InvalidClaimException.java`.
+- [ ] Membuat `exception/StorageException.java` jika diperlukan.
+- [ ] Menetapkan kontrak awal `LostAndFoundManager`.
+- [ ] Menyusun aturan validasi integritas data.
+
+### Tugas Intan
+
+- [ ] Membuat `model/Claimant.java`.
+- [ ] Menentukan kontrak input menu.
+- [ ] Menyusun format pesan validasi pengguna.
+- [ ] Menyiapkan data uji untuk elektronik dan dokumen.
+
+### Bukti yang wajib dikumpulkan
+
+- Source code Java.
+- Screenshot struktur package.
+- Bukti compile berhasil.
+- Self-check model.
+- Catatan penerapan empat pilar OOP.
+- Perubahan dicatat di `CHANGELOG.md`.
+
+### Kriteria selesai
+
+- [ ] Project dapat dikompilasi.
+- [ ] Object dapat dibuat melalui constructor.
+- [ ] Subclass dapat dipakai melalui referensi `Item`.
+- [ ] Verifikasi elektronik dan dokumen menggunakan implementasi berbeda.
+- [ ] Error domain dapat dilempar dan ditangani.
+
+---
+
+## Minggu 3 — Pengembangan dan Integrasi Aplikasi
+
+**Target resmi:** Aplikasi dengan fitur utama yang sudah berjalan.
+
+### Tugas tim
+
+- [ ] Mengembangkan fitur tambah, tampil, ubah status, dan hapus/arsip data.
+- [ ] Mengembangkan pencarian data.
+- [ ] Membuat antarmuka Console atau GUI.
+- [ ] Menggunakan `ArrayList` untuk koleksi objek.
+- [ ] Membaca data dari CSV saat startup.
+- [ ] Menulis perubahan data ke CSV.
+- [ ] Mengintegrasikan exception handling.
+- [ ] Mengintegrasikan seluruh class.
+- [ ] Melakukan pengujian awal dan debugging.
+
+### Tugas Aris
+
+- [ ] Meninjau kesesuaian model dengan service dan UI.
+- [ ] Memastikan logika verifikasi tetap berada pada subclass model.
+- [ ] Memeriksa aturan transisi status.
+- [ ] Meninjau ulang UML berdasarkan source code aktual.
+- [ ] Membantu debugging integrasi kontrak antarkelas.
+
+### Tugas Bilu
+
+- [ ] Membuat `service/LostAndFoundManager.java`.
+- [ ] Mengelola `ArrayList<Item>`.
+- [ ] Membuat operasi tambah dan tampil data.
+- [ ] Membuat pencarian berdasarkan keyword.
+- [ ] Membuat filter berdasarkan lokasi.
+- [ ] Membuat proses klaim, serah terima, dan pembatalan.
+- [ ] Membuat `storage/CsvStorage.java`.
+- [ ] Membaca dan menulis `data/lost_found_data.csv`.
+- [ ] Menangani file hilang, baris rusak, dan exception I/O.
+
+### Tugas Intan
+
+- [ ] Membuat `Main.java`.
+- [ ] Membuat menu interaktif.
+- [ ] Membuat form pelaporan elektronik dan dokumen.
+- [ ] Membuat form pencarian dan filter.
+- [ ] Membuat form pengajuan klaim.
+- [ ] Membuat alur serah terima dan pembatalan klaim.
+- [ ] Membuat validasi input.
+- [ ] Menampilkan data tanpa membocorkan bukti rahasia.
+- [ ] Menyusun test case awal.
+
+### Kriteria selesai
+
+- [ ] Aplikasi dapat dijalankan dari entry point.
+- [ ] Data CSV berhasil dimuat.
+- [ ] Data baru dapat disimpan.
+- [ ] Pencarian berjalan.
+- [ ] Klaim valid dan invalid menghasilkan status yang benar.
+- [ ] Input salah tidak menyebabkan aplikasi crash.
+- [ ] Perubahan dicatat di `CHANGELOG.md`.
+
+---
+
+## Minggu 4 — Pengujian dan Finalisasi
+
+**Target resmi:** Aplikasi final, dokumentasi, dan presentasi proyek.
+
+### Tugas tim
+
+- [ ] Melakukan pengujian keseluruhan aplikasi.
+- [ ] Memperbaiki bug.
+- [ ] Menyelesaikan laporan BAB I–V.
+- [ ] Membuat screenshot aplikasi dan hasil pengujian.
+- [ ] Membuat video demonstrasi berdurasi 5–10 menit.
+- [ ] Menyiapkan slide presentasi.
+- [ ] Melakukan simulasi tanya jawab dan live coding.
+- [ ] Memastikan seluruh anggota memahami seluruh sistem.
+
+### Matriks pengujian minimum
+
+- [ ] Tambah barang elektronik dengan data valid.
+- [ ] Tambah barang dokumen dengan data valid.
+- [ ] Input field kosong.
+- [ ] Input tanggal tidak valid.
+- [ ] Pencarian keyword cocok.
+- [ ] Pencarian tanpa hasil.
+- [ ] Filter lokasi.
+- [ ] Klaim dengan bukti benar.
+- [ ] Klaim dengan bukti salah.
+- [ ] Konfirmasi serah terima.
+- [ ] Pembatalan klaim.
+- [ ] Persistensi setelah aplikasi dijalankan ulang.
+- [ ] File CSV tidak tersedia.
+- [ ] Baris CSV rusak.
+
+### Isi laporan final
+
+- [ ] BAB I — Pendahuluan.
+- [ ] BAB II — Analisis dan Perancangan Sistem.
+- [ ] BAB III — Implementasi.
+- [ ] BAB IV — Pengujian dan Hasil.
+- [ ] BAB V — Kesimpulan.
+
+### Video demonstrasi
+
+- [ ] Penjelasan singkat masalah dan aplikasi.
+- [ ] Demonstrasi pelaporan barang.
+- [ ] Demonstrasi pencarian.
+- [ ] Demonstrasi klaim valid.
+- [ ] Demonstrasi klaim invalid.
+- [ ] Demonstrasi persistensi CSV.
+- [ ] Penjelasan empat pilar OOP.
+- [ ] Penjelasan pembagian tugas anggota.
+
+### Presentasi individu
+
+Setiap anggota harus mampu menjelaskan:
+
+- [ ] Modul yang dikerjakan.
+- [ ] Alur kerja aplikasi.
+- [ ] Alasan penggunaan setiap class.
+- [ ] Implementasi encapsulation, inheritance, polymorphism, dan abstraction.
+- [ ] Exception handling dan file handling.
+- [ ] Perubahan sederhana pada kode saat live coding.
+
+### Kriteria selesai akhir
+
+- [ ] Source code lengkap dan dapat dijalankan.
+- [ ] Struktur folder rapi.
+- [ ] Laporan final selesai.
+- [ ] Bukti pengujian tersedia.
+- [ ] Video selesai.
+- [ ] Presentasi selesai.
+- [ ] Semua perubahan terakhir dicatat di `CHANGELOG.md`.
+
+---
+
+## Ringkasan Status Pelaporan
+
+| Minggu | Target | Status | Bukti utama |
+|---|---|---|---|
+| 1 | Analisis dan desain | Selesai | Dokumen analisis, UML, role, dan arsitektur |
+| 2 | Core OOP | Belum mulai | Source code model dan self-check |
+| 3 | Integrasi aplikasi | Belum mulai | Aplikasi berjalan dan CSV persistence |
+| 4 | Finalisasi | Belum mulai | Laporan, testing, video, dan presentasi |
