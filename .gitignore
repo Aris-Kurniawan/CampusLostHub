@@ -1,0 +1,28 @@
+# Compiled class files
+bin/
+*.class
+
+# Package files
+*.jar
+*.war
+*.ear
+
+# Virtual machines & Crash logs
+*.log
+hs_err_pid*
+
+# IDE Configurations
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+nbproject/
+build/
+dist/
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+desktop.ini
