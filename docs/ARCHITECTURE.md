@@ -127,10 +127,10 @@ classDiagram
         +getDetail() String
     }
 
-    class LostAndFoundService {
+    class LostAndFoundManager {
         -ArrayList~Item~ daftarBarang
         -String storageFilePath
-        +LostAndFoundService(storageFilePath: String)
+        +LostAndFoundManager(storageFilePath: String)
         +tambahBarang(item: Item) void
         +getSemuaBarang() ArrayList~Item~
         +getBarangAktif() ArrayList~Item~
@@ -145,7 +145,7 @@ classDiagram
     }
 
     class Main {
-        -LostAndFoundService service$
+        -LostAndFoundManager manager$
         -Scanner scanner$
         +main(args: String[])$ void
         -tampilkanMenu()$ void

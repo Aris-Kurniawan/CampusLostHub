@@ -6,6 +6,61 @@ Format versi mengikuti tahap pengerjaan proyek, bukan klaim rilis produk.
 
 ## [Unreleased]
 
+### 2026-11-15 — Modul belajar lokal Aris
+
+#### Added
+
+- Menambahkan modul belajar pribadi di `.local-learning/` untuk memahami model inti, OOP, polymorphism, status, dan CSV.
+- Menambahkan `.local-learning/` ke `.gitignore` agar modul tidak masuk GitHub.
+
+#### Tests
+
+- `git check-ignore -v .local-learning/MODUL_BELAJAR_MODEL_ARIS.md`: berhasil; folder diabaikan Git.
+- `git diff --check`: berhasil.
+
+### 2026-11-15 — Implementasi core model Aris
+
+#### Added
+
+- Menambahkan `Verifiable.java`.
+- Menambahkan abstract class `Item.java`.
+- Menambahkan `BarangElektronik.java`.
+- Menambahkan `BarangDokumen.java`.
+- Menambahkan `tests/ModelSelfCheck.java`.
+
+#### Changed
+
+- Menyelaraskan nama service pada dokumentasi dari `LostAndFoundService` menjadi `LostAndFoundManager`.
+- Menambahkan aturan validasi field wajib dan transisi status pada model.
+- Menambahkan serialisasi sembilan kolom CSV pada subclass model.
+- Menambahkan pencocokan klaim elektronik tanpa mempermasalahkan spasi atau tanda hubung.
+- Memperbarui `docs/TASK_ARIS.md` berdasarkan implementasi yang tersedia.
+
+#### Tests
+
+- `SOURCE STRUCTURE: PASS`.
+- `git diff --check`: berhasil.
+- Compile dan self-check Java belum dijalankan karena `javac` tidak tersedia.
+- Instalasi JDK belum dilakukan karena membutuhkan hak administrator.
+
+#### Notes
+
+- Handoff service Bilu, `Claimant` Intan, dan review integrasi belum selesai.
+- Perubahan berada di branch lokal `development`.
+
+### 2026-11-15 — Task guide personal Aris
+
+#### Added
+
+- Menambahkan `docs/TASK_ARIS.md`.
+- Memetakan pekerjaan Aris dari implementasi `Verifiable` sampai review integrasi dan persiapan presentasi.
+- Menambahkan Definition of Done untuk role Lead Architect & Core OOP.
+
+#### Tests
+
+- Verifikasi struktur Markdown dan checklist dilakukan.
+- Pengujian Java belum dijalankan karena source code Java belum tersedia.
+
 ### 2026-11-15 — Aturan Git dua branch
 
 #### Changed

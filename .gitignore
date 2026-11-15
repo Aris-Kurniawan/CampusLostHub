@@ -26,3 +26,6 @@ dist/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Modul belajar lokal pribadi (tidak dikirim ke GitHub)
+.local-learning/

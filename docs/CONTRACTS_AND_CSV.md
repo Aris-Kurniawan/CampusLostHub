@@ -54,7 +54,7 @@ BRG-1004,DOKUMEN,STNK Motor Honda Vario,Plat nomor L 4521 AA dompet kulit coklat
 
 1. **Serialisasi (`Item.toCsvString()`):**
    * Kelas turunan mengonversi atributnya ke string CSV menggunakan format di atas. Karakter koma pada teks deskripsi akan digantikan dengan spasi atau di-escape agar tidak merusak kolom.
-2. **Deserialisasi (`LostAndFoundService.muatDariFile()`):**
+2. **Deserialisasi (`LostAndFoundManager.muatDariFile()`):**
    * Membaca per baris menggunakan `BufferedReader`.
    * Men-split baris dengan `line.split(",")`.
    * Memeriksa kolom `kategori` pada indeks 1:
