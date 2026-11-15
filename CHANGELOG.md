@@ -6,6 +6,23 @@ Format versi mengikuti tahap pengerjaan proyek, bukan klaim rilis produk.
 
 ## [Unreleased]
 
+### 2026-11-15 — Implementasi Exception, CsvStorage, dan LostAndFoundManager (Bilu)
+
+#### Added
+- `src/id/ac/pens/psdku/campuslosthub/exception/ItemNotFoundException.java`
+- `src/id/ac/pens/psdku/campuslosthub/exception/InvalidClaimException.java`
+- `src/id/ac/pens/psdku/campuslosthub/exception/StorageException.java`
+- `src/id/ac/pens/psdku/campuslosthub/storage/CsvStorage.java`
+- `src/id/ac/pens/psdku/campuslosthub/service/LostAndFoundManager.java`
+- `tests/ServiceStorageSelfCheck.java`
+
+#### Tests
+- `javac -d bin (Get-ChildItem -Path src -Recurse -Filter *.java | ForEach-Object { $_.FullName })`: berhasil (seluruh modul Aris, Bilu, dan Intan terkompilasi tanpa error).
+- `javac -cp bin -d bin tests/ServiceStorageSelfCheck.java; java -cp bin ServiceStorageSelfCheck`: `SERVICE & STORAGE SELF-CHECK: PASS`.
+
+#### Notes
+- Method `LostAndFoundManager` menyelaraskan kontrak yang dipanggil oleh `ConsoleView` & `MainFrame` (`addItem`, `getAllItems`, `searchByName`, `filterByLocation`, `findById`, `claimItem`, `completeHandover`, `cancelClaim`) serta alias berbahasa Indonesia sesuai `docs/ROLE_BILU.md`.
+
 ### 2026-11-15 — View, Main, dan Claimant (Intan)
 
 #### Added
