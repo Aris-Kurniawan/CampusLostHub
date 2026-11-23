@@ -6,6 +6,22 @@ Format versi mengikuti tahap pengerjaan proyek, bukan klaim rilis produk.
 
 ## [Unreleased]
 
+### 2026-11-16 — Dokumentasi BAB III Implementasi
+
+#### Added
+- Menambahkan `docs/BAB_III_IMPLEMENTASI.md` sesuai struktur laporan Final Project PBO.
+- Menambahkan `docs/BAB_III_IMPLEMENTASI.docx` sebagai dokumen Word untuk dikirim dan digunakan dalam laporan.
+- Mendokumentasikan lingkungan pengembangan, struktur package, class/object, Encapsulation, Inheritance, Polymorphism, Abstraction, Exception Handling, Collection Framework, dan File Handling CSV.
+- Menyesuaikan isi dokumen dengan source code aktual yang tersedia, termasuk `LostAndFoundManager`, `CsvStorage`, `Main`, `ConsoleView`, dan `MainFrame`.
+
+#### Tests
+- `git -c core.whitespace=cr-at-eol diff --check`: berhasil; CRLF lama diperlakukan sebagai akhir baris valid.
+- Kompilasi Java dan self-check belum dijalankan karena `javac` tidak tersedia pada environment.
+
+#### Notes
+- Dokumen tidak mengklaim kompilasi atau self-check berhasil.
+- Operasi ubah data umum dan hapus permanen belum dinyatakan tersedia sebagai fitur terpisah.
+
 ### 2026-11-15 — Implementasi Exception, CsvStorage, dan LostAndFoundManager (Bilu)
 
 #### Added
