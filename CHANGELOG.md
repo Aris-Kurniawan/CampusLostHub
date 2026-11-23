@@ -6,6 +6,17 @@ Format versi mengikuti tahap pengerjaan proyek, bukan klaim rilis produk.
 
 ## [Unreleased]
 
+### 2026-11-23 — Penyesuaian Desain Antarmuka & Reduksi Alur UI
+
+#### Added
+- Menambahkan `docs/PENYESUAIAN_DESAIN_UI.md` yang merinci penyederhanaan alur antarmuka pengguna (reduksi langkah berulang).
+- Merampingkan struktur menu dari 6 menu terpisah menjadi 3 menu utama: Jelajah & Klaim Terpadu, Formulir Laporan Cepat, dan Panel Petugas Pos.
+- Menambahkan spesifikasi wireframe ASCII dan pemetaan alur ke komponen OOP (`Item`, `LostAndFoundManager`, `Claimant`, `CsvStorage`).
+
+#### Tests
+- Kompilasi source code (`javac`) dan eksekusi `ModelSelfCheck` serta `ServiceStorageSelfCheck`: PASS (berhasil tanpa error).
+- Verifikasi struktur Markdown: berhasil.
+
 ### 2026-11-16 — Dokumentasi BAB III Implementasi
 
 #### Added
