@@ -61,18 +61,40 @@ Mengintegrasikan fitur **Lihat Katalog**, **Pencarian**, **Filter Lokasi**, dan 
 └─────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-#### B. Alur Interaksi Pengguna (User Flow)
-1. Mahasiswa membuka menu. Tabel katalog aktif langsung tersaji secara otomatis.
-2. Mahasiswa dapat mengetik kata kunci atau memilih dropdown lokasi ruangan kampus untuk menyaring barang.
-3. Begitu menemukan barang miliknya, mahasiswa memilih/mengklik baris barang tersebut dan menekan tombol **"Ajukan Klaim Kepemilikan"**.
-4. Sistem membuka dialog/modal klaim dengan **ID Barang yang sudah terisi otomatis**:
-   * Input `NIM` (10 digit).
-   * Input `Nama Lengkap`.
-   * Input `Nomor WhatsApp/HP`.
-   * Input `Bukti Rahasia` (nomor seri jika elektronik, atau nama pemilik jika dokumen).
-5. Mahasiswa menekan tombol **"Kirim Klaim"**.
-   * Jika bukti valid: Status barang berubah menjadi `PROSES_KLAIM`.
-   * Jika bukti salah: Muncul pesan penolakan dari `InvalidClaimException` tanpa mengubah status barang.
+#### B. Wireframe Dialog Modal Pengajuan Klaim (Dengan Instruksi KTM)
+```text
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│ 📝 PENGAJUAN KLAIM KEPEMILIKAN BARANG (ID: BRG-1002)                            │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│ ℹ️ PETUNJUK VERIFIKASI KARTU TANDA MAHASISWA (KTM):                              │
+│ • Masukkan identitas resmi sesuai Kartu Tanda Mahasiswa (KTM) aktif.           │
+│ • Fisik KTM asli WAJIB dibawa dan ditunjukkan ke petugas saat serah terima pos. │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│ [1. IDENTITAS PEMOHON / CLAIMANT]                                               │
+│ * NIM Mahasiswa (KTM)     : [ 3125521004           ] (Validasi: 10 digit angka) │
+│ * Nama Lengkap Sesuai KTM : [ Aris Kurniawan       ]                            │
+│ * No. Handphone / WhatsApp: [ 081234567890         ]                            │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│ [2. BUKTI RAHASIA KEPEMILIKAN BARANG]                                           │
+│ * Masukkan Bukti Kepemilikan: [ 3125521004                                     ]│
+│   - Jika Barang Elektronik : Masukkan Serial Number / IMEI rahasia.             │
+│   - Jika Barang Dokumen/KTM: Masukkan NIM atau Nama Pemilik sesuai dokumen.     │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                        [ ❌ Batal ]    [ 🚀 Kirim Bukti Klaim ] │
+└─────────────────────────────────────────────────────────────────────────────────┘
+```
+
+#### C. Alur Interaksi Pengguna & Verifikasi KTM (User Flow)
+1. Mahasiswa membuka menu katalog. Tabel barang aktif langsung tersaji secara otomatis.
+2. Mahasiswa menyaring barang via kolom pencarian nama atau filter lokasi ruangan kampus.
+3. Begitu menemukan barang miliknya, mahasiswa memilih baris barang tersebut dan menekan tombol **"Ajukan Klaim Kepemilikan"**.
+4. Sistem membuka modal klaim dengan **ID Barang yang sudah terisi otomatis**:
+   * **Instruksi KTM Tampil di Layar:** Sistem menampilkan peringatan jelas bahwa pengklaim harus mahasiswa aktif dan wajib membawa fisik KTM asli saat pengambilan di pos.
+   * **Input Data Identitas KTM:** Mahasiswa mengisi `NIM` (10 digit sesuai KTM) dan `Nama Lengkap` sesuai KTM, serta `No. HP/WhatsApp` untuk kontak darurat.
+   * **Input Bukti Kepemilikan:** Mahasiswa memasukkan bukti rahasia. Jika barang berupa KTM/Dokumen, mahasiswa memasukkan NIM atau nama lengkapnya untuk diverifikasi sistem secara polimorfik via `verifyClaim()`.
+5. Mahasiswa menekan tombol **"Kirim Bukti Klaim"**.
+   * **Jika Bukti Benar:** Status barang otomatis berubah menjadi `PROSES_KLAIM`. Muncul konfirmasi: *"Klaim diterima sementara! Silakan bawa KTM fisik asli Anda ke pos kampus untuk verifikasi serah terima."*
+   * **Jika Bukti Salah:** Muncul pesan penolakan dari `InvalidClaimException` tanpa mengubah status barang.
 
 ---
 
@@ -129,9 +151,10 @@ Panel khusus petugas pos kampus untuk memproses serah terima fisik atau menolak 
 └─────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-#### B. Logika Aksi Petugas
-* **Tombol "Konfirmasi Serah Terima Fisik":** Ditekan setelah pemilik sah menunjukkan identitas fisik asli di pos kampus. Method `completeHandover(id)` dijalankan dan status berubah menjadi `SELESAI`.
-* **Tombol "Tolak / Batalkan Klaim":** Ditekan jika saat verifikasi fisik pemohon tidak dapat membuktikan kepemilikan. Method `cancelClaim(id)` dijalankan dan status dikembalikan menjadi `TERSEDIA` agar mahasiswa lain tetap dapat mencari/mengklaimnya.
+#### B. Logika Aksi Petugas & Verifikasi Fisik KTM
+* **Pengecekan Fisik Kartu KTM:** Sebelum menekan tombol konfirmasi, petugas pos memeriksa kecocokan fisik KTM asli yang dibawa mahasiswa dengan data `NIM` dan `Nama Claimant` yang tertera pada tabel klaim aktif.
+* **Tombol "Konfirmasi Serah Terima Fisik":** Ditekan setelah fisik KTM terbukti asli dan sesuai. Method `completeHandover(id)` dijalankan dan status berubah menjadi `SELESAI`.
+* **Tombol "Tolak / Batalkan Klaim":** Ditekan jika saat verifikasi fisik mahasiswa tidak dapat menunjukkan fisik KTM atau bukti tidak sesuai. Method `cancelClaim(id)` dijalankan dan status dikembalikan menjadi `TERSEDIA` agar mahasiswa lain tetap dapat mencari/mengklaimnya.
 
 ---
 

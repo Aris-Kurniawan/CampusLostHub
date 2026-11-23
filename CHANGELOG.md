@@ -9,7 +9,9 @@ Format versi mengikuti tahap pengerjaan proyek, bukan klaim rilis produk.
 ### 2026-11-23 — Penyesuaian Desain Antarmuka & Reduksi Alur UI
 
 #### Added
+- Menambahkan workspace skill `.agents/skills/frontend-design/SKILL.md` ke dalam repositori proyek agar dapat digunakan bersama oleh seluruh anggota tim untuk acuan desain antarmuka.
 - Menambahkan `docs/PENYESUAIAN_DESAIN_UI.md` yang merinci penyederhanaan alur antarmuka pengguna (reduksi langkah berulang).
+- Menambahkan instruksi eksplisit dan wireframe dialog klaim untuk verifikasi berbasis Kartu Tanda Mahasiswa (KTM): input NIM 10 digit, nama sesuai KTM, serta verifikasi fisik KTM asli oleh petugas pos.
 - Merampingkan struktur menu dari 6 menu terpisah menjadi 3 menu utama: Jelajah & Klaim Terpadu, Formulir Laporan Cepat, dan Panel Petugas Pos.
 - Menambahkan spesifikasi wireframe ASCII dan pemetaan alur ke komponen OOP (`Item`, `LostAndFoundManager`, `Claimant`, `CsvStorage`).
 
