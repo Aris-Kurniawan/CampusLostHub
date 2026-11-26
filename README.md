@@ -72,16 +72,59 @@ CampusLostHub/
 ## 5. Cara Menjalankan Aplikasi
 
 ### Prasyarat
-* Java Development Kit (JDK) 11, 17, atau 21.
+* Java Development Kit (JDK) 11, 17, 21, atau 26+.
 
-### Kompilasi & Jalankan (CLI)
-```bash
-# Masuk ke folder root project
+### A. Menjalankan Antarmuka GUI Modern (Java Swing)
+
+Aplikasi utama secara default berjalan menggunakan antarmuka grafis (**Java Swing**) modern:
+
+#### Melalui PowerShell (Windows):
+```powershell
+# 1. Pastikan berada di direktori root proyek CampusLostHub
 cd CampusLostHub
 
-# Kompilasi semua file Java ke folder bin/
-javac -d bin src/id/ac/pens/psdku/campuslosthub/*.java src/id/ac/pens/psdku/campuslosthub/*/*.java
+# 2. Kompilasi seluruh file Java ke direktori bin/
+$files = Get-ChildItem -Path src -Recurse -Filter *.java | ForEach-Object { $_.FullName }
+javac -d bin $files
 
-# Jalankan aplikasi
+# 3. Jalankan aplikasi GUI Java Swing
 java -cp bin id.ac.pens.psdku.campuslosthub.Main
 ```
+
+#### Melalui Command Prompt (CMD) / Linux / macOS (Bash):
+```bash
+# 1. Kompilasi semua file Java
+javac -d bin src/id/ac/pens/psdku/campuslosthub/*.java src/id/ac/pens/psdku/campuslosthub/*/*.java
+
+# 2. Jalankan aplikasi GUI Java Swing
+java -cp bin id.ac.pens.psdku.campuslosthub.Main
+```
+
+---
+
+### B. Menjalankan Mode Console / Terminal (CLI)
+Jika ingin menjalankan antarmuka alternatif berbasis Terminal / Console teks (misalnya untuk pengujian cepat CLI):
+```bash
+java -cp bin id.ac.pens.psdku.campuslosthub.Main console
+```
+
+---
+
+### C. Menjalankan Pengujian Otomatis (Self-Check Tests)
+Proyek menyediakan tiga berkas self-check pengujian fungsional untuk menguji model inti, persistensi CSV, dan GUI:
+```powershell
+# Kompilasi berkas pengujian
+javac -cp bin -d bin tests/ModelSelfCheck.java tests/ServiceStorageSelfCheck.java tests/UISelfCheck.java
+
+# Eksekusi pengujian
+java -cp bin ModelSelfCheck
+java -cp bin ServiceStorageSelfCheck
+java -cp bin UISelfCheck
+```
+
+---
+
+### D. Akun Pengujian Panel Petugas Pos / Administrator
+Untuk menguji fitur verifikasi fisik, serah terima, dan kelola data inventaris di **Panel Petugas Pos**:
+* **Username:** `admin` (atau `petugas`)
+* **Password:** `admin123` (atau `petugas123`)
