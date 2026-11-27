@@ -174,6 +174,26 @@ public class LostAndFoundManager {
         return true;
     }
 
+    /** Menghapus barang berdasarkan ID dari daftar dan memperbarui file CSV. */
+    public boolean deleteItem(String id) throws ItemNotFoundException, StorageException {
+        Item item = cariById(id);
+        daftarBarang.remove(item);
+        simpanKeFile();
+        return true;
+    }
+
+    /** Menghitung jumlah barang berdasarkan status tertentu. */
+    public int countByStatus(String status) {
+        if (status == null) return 0;
+        int count = 0;
+        for (Item item : daftarBarang) {
+            if (status.equalsIgnoreCase(item.getStatus())) {
+                count++;
+            }
+        }
+        return count;
+    }
+
     /** Menyimpan seluruh daftar barang ke file CSV. */
     public void simpanKeFile() throws StorageException {
         storage.save(daftarBarang);
@@ -217,5 +237,10 @@ public class LostAndFoundManager {
     public boolean batalkanKlaim(String id)
             throws ItemNotFoundException, InvalidClaimException, StorageException {
         return cancelClaim(id);
+    }
+
+    public boolean hapusBarang(String id)
+            throws ItemNotFoundException, StorageException {
+        return deleteItem(id);
     }
 }

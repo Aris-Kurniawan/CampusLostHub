@@ -6,6 +6,53 @@ Format versi mengikuti tahap pengerjaan proyek, bukan klaim rilis produk.
 
 ## [Unreleased]
 
+### 2026-11-23 — Penyelarasan Layar Laporkan Temuan Berbasis Model Tabel & Dialog
+
+#### Added
+- `src/id/ac/pens/psdku/campuslosthub/view/LaporBarangDialog.java`: modal dialog untuk pencatatan formulir barang temuan baru secara ringkas dan terfokus.
+
+#### Changed
+- `src/id/ac/pens/psdku/campuslosthub/view/MainFrame.java`: menyelaraskan tampilan menu "Laporkan Temuan" menjadi model tabel (seperti menu Jelajah & Klaim) lengkap dengan pencarian, filter lokasi, serta tombol "+ Buat Laporan Barang Temuan" yang memicu modal dialog.
+- `src/id/ac/pens/psdku/campuslosthub/MODULE_OWNERSHIP.md`: memperbarui daftar file komponen view dengan `LaporBarangDialog.java`.
+
+#### Tests
+- Kompilasi: `javac -d bin (seluruh source code src)` -> Berhasil (Exit Code 0).
+- Eksekusi: `ModelSelfCheck`, `ServiceStorageSelfCheck`, `UISelfCheck` -> Seluruhnya PASS.
+
+### 2026-11-23 — Pemisahan Navbar Berbasis Peran, Kolom Deskripsi, & Penyempurnaan Kontras Tombol
+
+#### Changed
+- `src/id/ac/pens/psdku/campuslosthub/view/MainFrame.java`: memisahkan secara total navbar pengguna (Jelajah & Klaim, Laporkan Temuan, Riwayat Aktivitas) dan navbar petugas/admin (Dashboard Kendali, Verifikasi Klaim & Pos, Kelola Data Barang); menghilangkan subtab berlapis JTabbedPane di halaman admin; menambahkan kolom Deskripsi pada seluruh tabel; menghilangkan karakter Unicode emoji yang tidak terbaca pada font Windows.
+- `src/id/ac/pens/psdku/campuslosthub/view/UITheme.java`: menggunakan `BasicButtonUI` pada pembuatan tombol kustom untuk menjamin warna latar solid dan teks putih berdaya baca kontras tinggi di semua Look-and-Feel Windows; mengubah dot status SELESAI menjadi dot `● SELESAI`.
+- `src/id/ac/pens/psdku/campuslosthub/view/ClaimDialog.java`: menambahkan pratinjau deskripsi fisik barang pada dialog klaim.
+- `README.md`: mendokumentasikan panduan kompilasi dan cara menjalankan aplikasi Java Swing.
+
+#### Tests
+- Kompilasi: `javac -d bin (seluruh file src)` -> Berhasil (Exit Code 0).
+- Eksekusi: `ModelSelfCheck`, `ServiceStorageSelfCheck`, dan `UISelfCheck` -> PASS.
+
+### 2026-11-23 — Implementasi Antarmuka Modern Java Swing & Integrasi Sistem Lengkap
+
+#### Added
+- `src/id/ac/pens/psdku/campuslosthub/view/UITheme.java`: palet warna modern, renderer badge status/kategori, table styling, dan helper komponen Swing.
+- `src/id/ac/pens/psdku/campuslosthub/view/ClaimDialog.java`: modal dialog pengajuan klaim berbasis KTM fisik dan verifikasi polimorfik tanpa entri ID manual.
+- `src/id/ac/pens/psdku/campuslosthub/view/AdminLoginDialog.java`: modal login petugas/admin kampus (`admin`/`admin123`).
+- `tests/UISelfCheck.java`: unit & integration check untuk memvalidasi inisialisasi antarmuka dan interaksi manager.
+
+#### Changed
+- `src/id/ac/pens/psdku/campuslosthub/view/MainFrame.java`: perombakan menyeluruh menjadi antarmuka modern terpadu 4 layar (Jelajah & Klaim Barang, Formulir Laporan Dinamis, Riwayat Aktivitas Mahasiswa, serta Panel Petugas Pos/Admin).
+- `src/id/ac/pens/psdku/campuslosthub/service/LostAndFoundManager.java`: penambahan method `deleteItem(String id)`, alias `hapusBarang(String id)`, dan `countByStatus(String status)`.
+- `src/id/ac/pens/psdku/campuslosthub/Main.java`: integrasi pemanggilan `UIManager.setLookAndFeel(SystemLookAndFeel)` untuk tampilan desktop native.
+- `src/id/ac/pens/psdku/campuslosthub/MODULE_OWNERSHIP.md`: pembaruan daftar file antarmuka pengguna pada ownership Intan.
+- `.gitignore`: penambahan ignore folder dependencies lokal.
+
+#### Tests
+- Perintah kompilasi: `javac -d bin (semua file java di src/)` -> Berhasil (Exit Code 0).
+- Eksekusi test: `ModelSelfCheck`, `ServiceStorageSelfCheck`, dan `UISelfCheck` -> Semua PASS tanpa error.
+
+#### Notes
+- Antarmuka tetap berbasis Java Swing sesuai arahan pengguna dengan estetika modern, responsif, dan mempertahankan seluruh 4 pilar OOP serta persistensi file CSV.
+
 ### 2026-11-23 — Penyesuaian Desain Antarmuka & Reduksi Alur UI
 
 #### Added

@@ -5,16 +5,23 @@ import id.ac.pens.psdku.campuslosthub.view.ConsoleView;
 import id.ac.pens.psdku.campuslosthub.view.MainFrame;
 
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 
 /**
  * Entry point aplikasi CampusLostHub.
- * Tanpa argumen -> tampilan GUI (Swing). Dengan argumen "console" -> tampilan console.
+ * Tanpa argumen -> antarmuka modern GUI (Java Swing).
+ * Dengan argumen "console" -> antarmuka Terminal / Console CLI.
  */
 public class Main {
 
     public static void main(String[] args) {
-        // Catatan: sesuaikan dengan konstruktor LostAndFoundManager buatan Bilu
-        // (misalnya kalau butuh path file CSV: "data/lost_found_data.csv")
+        // Terapkan system look-and-feel agar tampilan native & rapi
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception ignored) {
+            // Gunakan look and feel bawaan jika gagal
+        }
+
         LostAndFoundManager manager = new LostAndFoundManager();
 
         if (args.length > 0 && args[0].equalsIgnoreCase("console")) {

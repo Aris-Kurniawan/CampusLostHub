@@ -17,10 +17,15 @@ src/id/ac/pens/psdku/campuslosthub/
 │   └── LostAndFoundManager.java
 ├── storage/                          # Bilu: File I/O CSV
 │   └── CsvStorage.java
-└── view/                             # Intan: UI dan validasi input
-    ├── ConsoleView.java
-    ├── InputValidator.java
-    └── TableFormatter.java
+├── view/                             # Intan: UI dan validasi input
+│   ├── MainFrame.java
+│   ├── ClaimDialog.java
+│   ├── LaporBarangDialog.java
+│   ├── AdminLoginDialog.java
+│   ├── UITheme.java
+│   ├── ConsoleView.java
+│   ├── InputValidator.java
+│   └── TableFormatter.java
 ```
 
 ## Pembagian role
