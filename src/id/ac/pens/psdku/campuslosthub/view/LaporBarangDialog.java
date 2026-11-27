@@ -84,14 +84,12 @@ public class LaporBarangDialog extends JDialog {
         txtNama = UITheme.buatTextField(20);
         txtDeskripsi = UITheme.buatTextField(20);
 
-        cbLokasi = new JComboBox<>(new String[]{
+        cbLokasi = UITheme.buatComboBox(new String[]{
                 "Lab Pemrograman", "Lab Jaringan", "Kantin PSDKU",
                 "Perpustakaan Lt. 2", "Gedung D4 Lt. 1", "Masjid Kampus",
                 "Parkir Motor Barat", "Pos Keamanan Utama"
         });
         cbLokasi.setEditable(true);
-        cbLokasi.setFont(UITheme.FONT_REGULAR);
-        cbLokasi.setBackground(UITheme.SURFACE);
         cbLokasi.setMaximumSize(new Dimension(Integer.MAX_VALUE, 36));
         cbLokasi.setAlignmentX(Component.LEFT_ALIGNMENT);
 

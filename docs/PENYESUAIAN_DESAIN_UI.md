@@ -53,11 +53,11 @@ Mengintegrasikan fitur **Lihat Katalog**, **Pencarian**, **Filter Lokasi**, dan 
 ├─────────────────────────────────────────────────────────────────────────────────┤
 │ ID       | Kategori   | Nama Barang      | Lokasi Ditemukan | Status            │
 │ ─────────┼────────────┼──────────────────┼──────────────────┼────────────────── │
-│ BRG-1001 | ELEKTRONIK | Flashdisk 32GB   | Lab PBO          | TERSEDIA          │
-│ BRG-1002 | DOKUMEN    | KTM PENS         | Kantin Pusat     | TERSEDIA          │
-│ BRG-1003 | ELEKTRONIK | Charger Asus     | Perpustakaan     | PROSES_KLAIM      │
+│ BRG-1001 | ELEKTRONIK | Flashdisk 32GB   | Lab PBO          | [Ajukan Klaim]    │
+│ BRG-1002 | DOKUMEN    | KTM PENS         | Kantin Pusat     | [Ajukan Klaim]    │
+│ BRG-1003 | ELEKTRONIK | Charger Asus     | Perpustakaan     | [Diproses]        │
 ├─────────────────────────────────────────────────────────────────────────────────┤
-│ [ Pilih Baris Barang di Atas ] ──>  [ 🔘 Ajukan Klaim Kepemilikan Barang Ini ]  │
+│ Klik tombol [Ajukan Klaim] pada baris TERSEDIA atau pilih baris -> [Ajukan]     │
 └─────────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -87,7 +87,8 @@ Mengintegrasikan fitur **Lihat Katalog**, **Pencarian**, **Filter Lokasi**, dan 
 #### C. Alur Interaksi Pengguna & Verifikasi KTM (User Flow)
 1. Mahasiswa membuka menu katalog. Tabel barang aktif langsung tersaji secara otomatis.
 2. Mahasiswa menyaring barang via kolom pencarian nama atau filter lokasi ruangan kampus.
-3. Begitu menemukan barang miliknya, mahasiswa memilih baris barang tersebut dan menekan tombol **"Ajukan Klaim Kepemilikan"**.
+3. Begitu menemukan barang miliknya (status `TERSEDIA`), mahasiswa dapat langsung menekan tombol **"Ajukan Klaim"** di kolom **Aksi** pada baris barang tersebut (atau memilih baris lalu menekan tombol **"Ajukan Klaim"** di footer).
+   * *(Alur Petugas Pos)*: Pada `Dashboard Kendali` Petugas, mengklik salah satu baris di tabel `Klaim Menunggu Verifikasi` otomatis mengarahkan petugas ke halaman **`Verifikasi Klaim & Pos`** agar seluruh persyaratan serah terima (checklist fisik, foto, dan TTD) terpenuhi sebelum status menjadi `SELESAI`.
 4. Sistem membuka modal klaim dengan **ID Barang yang sudah terisi otomatis**:
    * **Instruksi KTM Tampil di Layar:** Sistem menampilkan peringatan jelas bahwa pengklaim harus mahasiswa aktif dan wajib membawa fisik KTM asli saat pengambilan di pos.
    * **Input Data Identitas KTM:** Mahasiswa mengisi `NIM` (10 digit sesuai KTM) dan `Nama Lengkap` sesuai KTM, serta `No. HP/WhatsApp` untuk kontak darurat.

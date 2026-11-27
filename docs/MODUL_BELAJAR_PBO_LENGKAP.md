@@ -368,3 +368,7 @@ Persistensi dilakukan di `CsvStorage.java` menggunakan:
    * *Jawaban:* Melalui enkapsulasi. Atribut `status` bersifat `private`, dan setter `setStatus()` menerapkan validasi transisi status (*state machine*).
 4. **Mengapa tidak menggunakan MySQL?**
    * *Jawaban:* Sesuai juknis PBO kriteria 8 dan 9, proyek membuktikan implementasi `ArrayList<Item>` dan File I/O (`BufferedReader`/`BufferedWriter`). Menggunakan CSV juga membuat aplikasi 100% portabel dan dapat dijalankan instan di laptop mana pun tanpa konfigurasi DBMS.
+5. **Bagaimana alur 2 tahap verifikasi klaim di antarmuka GUI (`MainFrame` & `ClaimDialog`)?**
+   * *Jawaban:*
+     * **Tahap 1 (Verifikasi Polimorfik Otomatis):** Pada tabel `Katalog Barang`, setiap baris berstatus `TERSEDIA` memiliki tombol **"Ajukan Klaim"** (di kolom `Aksi`). Saat dikirim, `ClaimDialog` memanggil `LostAndFoundManager.claimItem()` yang mengeksekusi `item.verifyClaim(bukti)`. Jika cocok, status berubah menjadi `PROSES_KLAIM`; jika tidak cocok, dilempar `InvalidClaimException`.
+     * **Tahap 2 (Verifikasi Fisik Petugas Pos):** Pada `Dashboard Kendali` Petugas, mengklik baris di tabel `Klaim Menunggu Verifikasi` otomatis mengarahkan petugas ke halaman `Verifikasi Klaim & Pos` untuk memeriksa 3 checklist fisik (KTM asli, bukti cocok, BAST), foto serah terima, dan tanda tangan digital (`SignatureDialog`) sebelum status diubah menjadi `SELESAI`.

@@ -2,6 +2,7 @@ package id.ac.pens.psdku.campuslosthub.view;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
@@ -151,13 +152,16 @@ public class UITheme {
             int h = getHeight();
             int arc = h;
 
-            if (pillBg != null) {
+            if (!isEnabled()) {
+                g2.setColor(BORDER);
+                g2.fill(new RoundRectangle2D.Float(0, 0, w - 1, h - 1, arc, arc));
+            } else if (pillBg != null) {
                 Color drawBg = getModel().isPressed() ? pillBg.darker() : pillBg;
                 g2.setColor(drawBg);
                 g2.fill(new RoundRectangle2D.Float(0, 0, w - 1, h - 1, arc, arc));
             }
             if (pillBorder != null) {
-                g2.setColor(pillBorder);
+                g2.setColor(isEnabled() ? pillBorder : BORDER);
                 g2.draw(new RoundRectangle2D.Float(0.5f, 0.5f, w - 1f, h - 1f, arc, arc));
             }
             g2.dispose();
@@ -165,32 +169,38 @@ public class UITheme {
         }
     }
 
-    /** TextField modern dengan sudut melengkung (curve 14px) dan padding lega. */
+    /** TextField modern berbentuk pill penuh (mengikuti tombol Reset) dengan padding lega. */
     public static JTextField buatTextField(int columns) {
-        JTextField tf = new RoundedTextField(columns, 14);
+        JTextField tf = new RoundedTextField(columns, 36);
         tf.setFont(FONT_REGULAR);
         tf.setForeground(TEXT_MAIN);
         tf.setCaretColor(PRIMARY);
-        tf.setBorder(new EmptyBorder(6, 12, 6, 12));
+        tf.setBorder(new EmptyBorder(6, 16, 6, 16));
         Dimension pref = tf.getPreferredSize();
         tf.setPreferredSize(new Dimension(pref.width, 36));
         return tf;
     }
 
-    /** PasswordField modern dengan sudut melengkung (curve 14px). */
+    /** PasswordField modern berbentuk pill penuh. */
     public static JPasswordField buatPasswordField(int columns) {
-        JPasswordField pf = new RoundedPasswordField(columns, 14);
+        JPasswordField pf = new RoundedPasswordField(columns, 36);
         pf.setFont(FONT_REGULAR);
         pf.setForeground(TEXT_MAIN);
         pf.setCaretColor(PRIMARY);
-        pf.setBorder(new EmptyBorder(6, 12, 6, 12));
+        pf.setBorder(new EmptyBorder(6, 16, 6, 16));
         Dimension pref = pf.getPreferredSize();
         pf.setPreferredSize(new Dimension(pref.width, 36));
         return pf;
     }
 
-    /** JTextField kustom bersudut melengkung. */
+    /** ComboBox modern berbentuk pill penuh (seragam dengan tombol Reset & TextField). */
+    public static JComboBox<String> buatComboBox(String[] items) {
+        return new PillComboBox<>(items);
+    }
+
+    /** JTextField kustom berbentuk pill penuh (arc = height). */
     public static class RoundedTextField extends JTextField {
+        @SuppressWarnings("unused")
         private final int radius;
 
         public RoundedTextField(int columns, int radius) {
@@ -205,17 +215,19 @@ public class UITheme {
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             int w = getWidth();
             int h = getHeight();
-            g2.setColor(SURFACE_SUBTLE);
-            g2.fill(new RoundRectangle2D.Float(0, 0, w - 1, h - 1, radius, radius));
+            int arc = h;
+            g2.setColor(SURFACE);
+            g2.fill(new RoundRectangle2D.Float(0, 0, w - 1, h - 1, arc, arc));
             g2.setColor(isFocusOwner() ? CHARCOAL : BORDER);
-            g2.draw(new RoundRectangle2D.Float(0.5f, 0.5f, w - 1f, h - 1f, radius, radius));
+            g2.draw(new RoundRectangle2D.Float(0.5f, 0.5f, w - 1f, h - 1f, arc, arc));
             g2.dispose();
             super.paintComponent(g);
         }
     }
 
-    /** JPasswordField kustom bersudut melengkung. */
+    /** JPasswordField kustom berbentuk pill penuh (arc = height). */
     public static class RoundedPasswordField extends JPasswordField {
+        @SuppressWarnings("unused")
         private final int radius;
 
         public RoundedPasswordField(int columns, int radius) {
@@ -230,10 +242,100 @@ public class UITheme {
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             int w = getWidth();
             int h = getHeight();
-            g2.setColor(SURFACE_SUBTLE);
-            g2.fill(new RoundRectangle2D.Float(0, 0, w - 1, h - 1, radius, radius));
+            int arc = h;
+            g2.setColor(SURFACE);
+            g2.fill(new RoundRectangle2D.Float(0, 0, w - 1, h - 1, arc, arc));
             g2.setColor(isFocusOwner() ? CHARCOAL : BORDER);
-            g2.draw(new RoundRectangle2D.Float(0.5f, 0.5f, w - 1f, h - 1f, radius, radius));
+            g2.draw(new RoundRectangle2D.Float(0.5f, 0.5f, w - 1f, h - 1f, arc, arc));
+            g2.dispose();
+            super.paintComponent(g);
+        }
+    }
+
+    /** JComboBox kustom berbentuk pill penuh (arc = height) dengan ikon chevron halus. */
+    public static class PillComboBox<E> extends JComboBox<E> {
+        public PillComboBox(E[] items) {
+            super(items);
+            setOpaque(false);
+            setFont(FONT_REGULAR);
+            setForeground(TEXT_MAIN);
+            setBackground(SURFACE);
+            setBorder(new EmptyBorder(4, 14, 4, 8));
+            setCursor(new Cursor(Cursor.HAND_CURSOR));
+            setUI(new BasicComboBoxUI() {
+                @Override
+                protected JButton createArrowButton() {
+                    JButton btn = new JButton() {
+                        @Override
+                        protected void paintComponent(Graphics g) {
+                            Graphics2D g2 = (Graphics2D) g.create();
+                            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                            g2.setColor(TEXT_MUTED);
+                            g2.setStroke(new BasicStroke(1.6f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+                            int cx = getWidth() / 2;
+                            int cy = getHeight() / 2;
+                            g2.drawLine(cx - 4, cy - 2, cx, cy + 2);
+                            g2.drawLine(cx, cy + 2, cx + 4, cy - 2);
+                            g2.dispose();
+                        }
+                    };
+                    btn.setOpaque(false);
+                    btn.setContentAreaFilled(false);
+                    btn.setBorderPainted(false);
+                    btn.setFocusPainted(false);
+                    btn.setPreferredSize(new Dimension(24, 24));
+                    return btn;
+                }
+
+                @Override
+                public void paintCurrentValueBackground(Graphics g, Rectangle bounds, boolean hasFocus) {
+                    // Latar pill sudah digambar oleh paintComponent
+                }
+            });
+            setRenderer(new DefaultListCellRenderer() {
+                @Override
+                public Component getListCellRendererComponent(JList<?> list, Object value, int index,
+                                                              boolean isSelected, boolean cellHasFocus) {
+                    JLabel lbl = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                    lbl.setFont(FONT_REGULAR);
+                    if (index == -1) {
+                        lbl.setOpaque(false);
+                        lbl.setForeground(TEXT_MAIN);
+                    } else {
+                        lbl.setBorder(new EmptyBorder(6, 12, 6, 12));
+                        lbl.setBackground(isSelected ? PRIMARY_LIGHT : SURFACE);
+                        lbl.setForeground(isSelected ? PRIMARY_DARK : TEXT_MAIN);
+                    }
+                    return lbl;
+                }
+            });
+            Dimension pref = getPreferredSize();
+            setPreferredSize(new Dimension(pref.width + 20, 36));
+        }
+
+        @Override
+        public void setEditable(boolean aFlag) {
+            super.setEditable(aFlag);
+            if (aFlag && getEditor() != null && getEditor().getEditorComponent() instanceof JTextField) {
+                JTextField ed = (JTextField) getEditor().getEditorComponent();
+                ed.setOpaque(false);
+                ed.setBorder(new EmptyBorder(2, 2, 2, 2));
+                ed.setFont(FONT_REGULAR);
+                ed.setForeground(TEXT_MAIN);
+            }
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            int w = getWidth();
+            int h = getHeight();
+            int arc = h;
+            g2.setColor(SURFACE);
+            g2.fill(new RoundRectangle2D.Float(0, 0, w - 1, h - 1, arc, arc));
+            g2.setColor(isFocusOwner() || isPopupVisible() ? CHARCOAL : BORDER);
+            g2.draw(new RoundRectangle2D.Float(0.5f, 0.5f, w - 1f, h - 1f, arc, arc));
             g2.dispose();
             super.paintComponent(g);
         }
@@ -319,7 +421,8 @@ public class UITheme {
                         new EmptyBorder(0, 14, 0, 14)
                 ));
                 String text = value == null ? "" : value.toString();
-                if (column == 0 || "Kategori".equalsIgnoreCase(text) || "Status".equalsIgnoreCase(text)) {
+                if (column == 0 || "Kategori".equalsIgnoreCase(text)
+                        || "Status".equalsIgnoreCase(text) || "Aksi".equalsIgnoreCase(text)) {
                     lbl.setHorizontalAlignment(SwingConstants.CENTER);
                 } else {
                     lbl.setHorizontalAlignment(SwingConstants.LEFT);

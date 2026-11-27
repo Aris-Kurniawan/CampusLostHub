@@ -332,8 +332,12 @@ public class MainFrame extends JFrame {
         JButton btnLaporCta = UITheme.buatTombol("+ Laporkan Temuan", UITheme.CHARCOAL, Color.WHITE);
         btnLaporCta.addActionListener(e -> bukaDialogLaporBarang());
 
+        JPanel pnlHeroCta = new JPanel(new GridBagLayout());
+        pnlHeroCta.setOpaque(false);
+        pnlHeroCta.add(btnLaporCta);
+
         pnlHero.add(pnlHeroText, BorderLayout.WEST);
-        pnlHero.add(btnLaporCta, BorderLayout.EAST);
+        pnlHero.add(pnlHeroCta, BorderLayout.EAST);
 
         // 3 KPI Bento Row
         JPanel pnlKpi = new JPanel(new GridLayout(1, 3, 14, 0));
@@ -370,9 +374,7 @@ public class MainFrame extends JFrame {
 
         txtCariNama = UITheme.buatTextField(16);
         txtCariNama.setToolTipText("Cari nama barang...");
-        cbFilterLokasi = new JComboBox<>(new String[]{"Semua Lokasi Kampus"});
-        cbFilterLokasi.setFont(UITheme.FONT_REGULAR);
-        cbFilterLokasi.setBackground(UITheme.SURFACE);
+        cbFilterLokasi = UITheme.buatComboBox(new String[]{"Semua Lokasi Kampus"});
 
         JButton btnFilter = UITheme.buatTombol("Cari", UITheme.CHARCOAL, Color.WHITE);
         btnFilter.addActionListener(e -> terapkanFilterJelajah());
@@ -393,21 +395,24 @@ public class MainFrame extends JFrame {
         pnlToolbar.add(pnlFilter, BorderLayout.EAST);
 
         // Tabel Katalog
-        String[] kolom = {"ID Barang", "Kategori", "Nama Barang", "Deskripsi", "Lokasi Ditemukan", "Tanggal", "Status"};
+        String[] kolom = {"ID Barang", "Kategori", "Nama Barang", "Deskripsi", "Lokasi Ditemukan", "Tanggal", "Status", "Aksi"};
         modelTabelJelajah = new DefaultTableModel(kolom, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false;
+                return column == 7;
             }
         };
 
         tabelJelajah = new JTable(modelTabelJelajah);
         UITheme.formatTable(tabelJelajah);
         aturLebarKolomStandar(tabelJelajah);
+        pasangKolomTombolKlaim(tabelJelajah);
 
         tabelJelajah.getSelectionModel().addListSelectionListener(e -> {
             int row = tabelJelajah.getSelectedRow();
-            btnKlaimTerpilih.setEnabled(row >= 0);
+            boolean bisaKlaim = row >= 0
+                    && Item.STATUS_TERSEDIA.equals(modelTabelJelajah.getValueAt(row, 6));
+            btnKlaimTerpilih.setEnabled(bisaKlaim);
         });
 
         JScrollPane scroll = new JScrollPane(tabelJelajah);
@@ -446,6 +451,66 @@ public class MainFrame extends JFrame {
         t.getColumnModel().getColumn(4).setPreferredWidth(140);
         t.getColumnModel().getColumn(5).setPreferredWidth(95);
         t.getColumnModel().getColumn(6).setPreferredWidth(120);
+        if (t.getColumnCount() > 7) {
+            t.getColumnModel().getColumn(7).setPreferredWidth(140);
+        }
+    }
+
+    private void pasangKolomTombolKlaim(JTable t) {
+        t.getColumnModel().getColumn(7).setCellRenderer((table, value, isSelected, hasFocus, row, column) ->
+                buatPanelTombolBaris(table, row, isSelected));
+
+        t.getColumnModel().getColumn(7).setCellEditor(new DefaultCellEditor(new JCheckBox()) {
+            private int editedRow = -1;
+
+            @Override
+            public Component getTableCellEditorComponent(JTable table, Object value,
+                                                         boolean isSelected, int row, int column) {
+                editedRow = row;
+                JPanel wrap = new JPanel(new GridBagLayout());
+                wrap.setBackground(UITheme.PRIMARY_LIGHT);
+                String status = String.valueOf(modelTabelJelajah.getValueAt(row, 6));
+                boolean tersedia = Item.STATUS_TERSEDIA.equals(status);
+
+                UITheme.PillButton btn = buatTombolKlaimBaris(tersedia, status);
+                btn.addActionListener(e -> {
+                    fireEditingStopped();
+                    if (editedRow >= 0) {
+                        bukaDialogKlaimUntukBaris(editedRow);
+                    }
+                });
+                wrap.add(btn);
+                return wrap;
+            }
+
+            @Override
+            public Object getCellEditorValue() {
+                return "Ajukan Klaim";
+            }
+        });
+    }
+
+    private JPanel buatPanelTombolBaris(JTable table, int row, boolean isSelected) {
+        JPanel wrap = new JPanel(new GridBagLayout());
+        wrap.setBackground(isSelected ? table.getSelectionBackground() : UITheme.SURFACE);
+        String status = String.valueOf(modelTabelJelajah.getValueAt(row, 6));
+        boolean tersedia = Item.STATUS_TERSEDIA.equals(status);
+        wrap.add(buatTombolKlaimBaris(tersedia, status));
+        return wrap;
+    }
+
+    private UITheme.PillButton buatTombolKlaimBaris(boolean tersedia, String status) {
+        String label = tersedia ? "Ajukan Klaim"
+                : (Item.STATUS_PROSES_KLAIM.equals(status) ? "Diproses" : "Selesai");
+        UITheme.PillButton btn = new UITheme.PillButton(
+                label,
+                tersedia ? UITheme.CHARCOAL : UITheme.BORDER_LIGHT,
+                tersedia ? Color.WHITE : UITheme.TEXT_MUTED,
+                null);
+        btn.setFont(new Font("Segoe UI", Font.BOLD, 11));
+        btn.setBorder(new javax.swing.border.EmptyBorder(6, 12, 6, 12));
+        btn.setEnabled(tersedia);
+        return btn;
     }
 
     private void terapkanFilterJelajah() {
@@ -467,7 +532,7 @@ public class MainFrame extends JFrame {
                 modelTabelJelajah.addRow(new Object[]{
                         item.getId(), item.getKategori(), item.getNama(),
                         item.getDeskripsi(), item.getLokasiDitemukan(),
-                        item.getTanggalDitemukan(), item.getStatus()
+                        item.getTanggalDitemukan(), item.getStatus(), "Ajukan Klaim"
                 });
             }
         }
@@ -480,8 +545,13 @@ public class MainFrame extends JFrame {
                     "Pemberitahuan", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
+        bukaDialogKlaimUntukBaris(selectedRow);
+    }
 
-        String id = (String) modelTabelJelajah.getValueAt(selectedRow, 0);
+    private void bukaDialogKlaimUntukBaris(int row) {
+        if (row < 0 || row >= modelTabelJelajah.getRowCount()) return;
+
+        String id = (String) modelTabelJelajah.getValueAt(row, 0);
         Item item = manager.findById(id);
         if (item == null) return;
 
@@ -518,9 +588,7 @@ public class MainFrame extends JFrame {
         lblCari.setFont(UITheme.FONT_BOLD);
         txtCariLapor = UITheme.buatTextField(16);
 
-        cbFilterLokasiLapor = new JComboBox<>(new String[]{"Semua Lokasi Kampus"});
-        cbFilterLokasiLapor.setFont(UITheme.FONT_REGULAR);
-        cbFilterLokasiLapor.setBackground(UITheme.SURFACE);
+        cbFilterLokasiLapor = UITheme.buatComboBox(new String[]{"Semua Lokasi Kampus"});
 
         JButton btnFilter = UITheme.buatTombol("Cari", UITheme.CHARCOAL, Color.WHITE);
         btnFilter.addActionListener(e -> terapkanFilterLapor());
@@ -727,22 +795,38 @@ public class MainFrame extends JFrame {
         tabelAdminKlaim = new JTable(modelTabelAdminKlaim);
         UITheme.formatTable(tabelAdminKlaim);
         aturLebarKolomStandar(tabelAdminKlaim);
+        tabelAdminKlaim.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        tabelAdminKlaim.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                int row = tabelAdminKlaim.rowAtPoint(e.getPoint());
+                if (row >= 0) {
+                    String id = String.valueOf(modelTabelAdminKlaim.getValueAt(row, 0));
+                    bukaHalamanVerifikasiKlaim(id);
+                }
+            }
+        });
 
         JScrollPane scroll = new JScrollPane(tabelAdminKlaim);
         scroll.setBorder(BorderFactory.createLineBorder(UITheme.BORDER_LIGHT, 1));
         scroll.getViewport().setBackground(UITheme.SURFACE);
 
-        JPanel pnlAksi = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
+        JPanel pnlAksi = new JPanel(new BorderLayout());
         pnlAksi.setBackground(UITheme.SURFACE);
 
-        JButton btnBatalKlaim = UITheme.buatTombol("Tolak / Batalkan Klaim", UITheme.DANGER_BG, UITheme.DANGER_TEXT);
-        btnBatalKlaim.addActionListener(e -> adminBatalkanKlaim(tabelAdminKlaim, modelTabelAdminKlaim));
+        JLabel lblHintVerif = new JLabel("Klik baris antrean di atas untuk langsung menuju halaman Verifikasi Klaim & Pos (checklist fisik, foto & TTD).");
+        lblHintVerif.setFont(UITheme.FONT_SMALL);
+        lblHintVerif.setForeground(UITheme.TEXT_MUTED);
 
-        JButton btnSelesaiKlaim = UITheme.buatTombol("Konfirmasi Serah Terima (Selesai)", UITheme.CHARCOAL, Color.WHITE);
-        btnSelesaiKlaim.addActionListener(e -> adminSelesaikanKlaim(tabelAdminKlaim, modelTabelAdminKlaim));
+        JButton btnKeVerifikasi = UITheme.buatTombol("Buka Verifikasi Klaim ->", UITheme.CHARCOAL, Color.WHITE);
+        btnKeVerifikasi.addActionListener(e -> {
+            int row = tabelAdminKlaim.getSelectedRow();
+            String id = row >= 0 ? String.valueOf(modelTabelAdminKlaim.getValueAt(row, 0)) : null;
+            bukaHalamanVerifikasiKlaim(id);
+        });
 
-        pnlAksi.add(btnBatalKlaim);
-        pnlAksi.add(btnSelesaiKlaim);
+        pnlAksi.add(lblHintVerif, BorderLayout.WEST);
+        pnlAksi.add(btnKeVerifikasi, BorderLayout.EAST);
 
         pnlTabelCard.add(lblAntreanTitle, BorderLayout.NORTH);
         pnlTabelCard.add(scroll, BorderLayout.CENTER);
@@ -751,6 +835,20 @@ public class MainFrame extends JFrame {
         p.add(pnlKpi, BorderLayout.NORTH);
         p.add(pnlTabelCard, BorderLayout.CENTER);
         return p;
+    }
+
+    private void bukaHalamanVerifikasiKlaim(String itemId) {
+        gantiLayarUtama("ADMIN_VERIFIKASI");
+        if (itemId != null) {
+            for (int i = 0; i < modelListAntrean.size(); i++) {
+                String entry = modelListAntrean.getElementAt(i);
+                if (entry.startsWith(itemId + " ")) {
+                    listAntreanKlaim.setSelectedIndex(i);
+                    listAntreanKlaim.ensureIndexIsVisible(i);
+                    break;
+                }
+            }
+        }
     }
 
     // =========================================================================
@@ -1069,9 +1167,7 @@ public class MainFrame extends JFrame {
         lblCari.setFont(UITheme.FONT_BOLD);
         txtAdminCariKelola = UITheme.buatTextField(16);
 
-        cbAdminFilterStatus = new JComboBox<>(new String[]{"SEMUA", "TERSEDIA", "PROSES_KLAIM", "SELESAI"});
-        cbAdminFilterStatus.setFont(UITheme.FONT_REGULAR);
-        cbAdminFilterStatus.setBackground(UITheme.SURFACE);
+        cbAdminFilterStatus = UITheme.buatComboBox(new String[]{"SEMUA", "TERSEDIA", "PROSES_KLAIM", "SELESAI"});
 
         JButton btnCari = UITheme.buatTombol("Filter", UITheme.CHARCOAL, Color.WHITE);
         btnCari.addActionListener(e -> filterTabelKelolaAdmin());

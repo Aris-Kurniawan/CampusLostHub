@@ -6,6 +6,42 @@ Format versi mengikuti tahap pengerjaan proyek, bukan klaim rilis produk.
 
 ## [Unreleased]
 
+### 2026-11-27 — Pembaruan Modul Pembelajaran & Dokumen Desain UI
+
+#### Changed
+- `docs/MODUL_BELAJAR_PBO_LENGKAP.md`: menambahkan rangkuman Q&A #5 mengenai alur 2 tahap verifikasi klaim di GUI (`Ajukan Klaim` per baris katalog dan verifikasi fisik wajib di halaman `Verifikasi Klaim & Pos`).
+- `docs/PENYESUAIAN_DESAIN_UI.md`: memperbarui wireframe & user flow agar selaras dengan tombol `Ajukan Klaim` per baris pada tabel katalog dan navigasi klik-baris dari Dashboard Petugas ke `Verifikasi Klaim & Pos`.
+
+### 2026-11-27 — Alur Wajib Verifikasi Klaim & Pos dari Dashboard Petugas
+
+#### Changed
+- `src/id/ac/pens/psdku/campuslosthub/view/MainFrame.java`: menghapus tombol pintas `"Konfirmasi Serah Terima (Selesai)"` dan `"Tolak / Batalkan Klaim"` di Dashboard Petugas agar serah terima wajib melewati persyaratan checklist fisik, foto, & TTD di halaman `Verifikasi Klaim & Pos`; mengklik baris pada tabel `Klaim Menunggu Verifikasi` otomatis mengarahkan ke halaman `Verifikasi Klaim & Pos` dan memilih item terkait.
+
+#### Tests
+- Perintah: `javac -d out -encoding UTF-8 ...`
+- Hasil: kompilasi berhasil (`COMPILE_OK`).
+
+### 2026-11-27 — Tombol Ajukan Klaim per Baris pada Katalog Barang & Perbaikan PillButton Disabled
+
+#### Changed
+- `src/id/ac/pens/psdku/campuslosthub/view/UITheme.java`: memperjelas visual state `PillButton` saat disabled (latar `#E5E7EB` agar tidak tampak seperti tombol aktif hitam) dan meratakan header kolom `Aksi`.
+- `src/id/ac/pens/psdku/campuslosthub/view/MainFrame.java`: menambahkan kolom `Aksi` dengan tombol pill `"Ajukan Klaim"` di setiap baris tabel `Katalog Barang` (aktif untuk status `TERSEDIA`, nonaktif `"Diproses"`/`"Selesai"` untuk status lain), serta membungkus tombol `+ Laporkan Temuan` agar tidak meregang vertikal di `BorderLayout.EAST`.
+
+#### Tests
+- Perintah: `javac -d out -encoding UTF-8 ...` dan `git diff --check`
+- Hasil: kompilasi berhasil (`COMPILE_OK`) dan `git diff --check` bersih.
+
+### 2026-11-27 — Penyeragaman Semua Input & Dropdown Swing Menjadi Full-Pill
+
+#### Changed
+- `src/id/ac/pens/psdku/campuslosthub/view/UITheme.java`: mengubah `RoundedTextField` & `RoundedPasswordField` menjadi full-pill (`arc = height`, latar `#FFFFFF`) agar seragam dengan tombol `Reset`, serta menambahkan `PillComboBox` dan `UITheme.buatComboBox` dengan ikon chevron halus.
+- `src/id/ac/pens/psdku/campuslosthub/view/MainFrame.java`: mengganti seluruh `JComboBox` filter (`cbFilterLokasi`, `cbFilterLokasiLapor`, `cbAdminFilterStatus`) menggunakan `UITheme.buatComboBox`.
+- `src/id/ac/pens/psdku/campuslosthub/view/LaporBarangDialog.java`: mengganti `cbLokasi` menggunakan `UITheme.buatComboBox`.
+
+#### Tests
+- Perintah: `javac -d out -encoding UTF-8 ...` dan `git diff --check`
+- Hasil: kompilasi berhasil (`COMPILE_OK`) dan `git diff --check` bersih.
+
 ### 2026-11-27 — Penyempurnaan Tabel Swing dengan Pill Badge Melengkung (Curve)
 
 #### Changed
