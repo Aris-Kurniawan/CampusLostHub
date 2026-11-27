@@ -6,6 +6,13 @@ Format versi mengikuti tahap pengerjaan proyek, bukan klaim rilis produk.
 
 ## [Unreleased]
 
+### 2026-11-27 — Penyempurnaan Tabel Swing dengan Pill Badge Melengkung (Curve)
+
+#### Changed
+- `src/id/ac/pens/psdku/campuslosthub/view/UITheme.java`: memperbarui `ModernTableCellRenderer` dan header `JTable` agar badge `Status` dan `Kategori` digambar sebagai pill membulat (`RoundRectangle2D`) bergaya Finexy Orange & White, serta mengubah `buatTextField` & `buatPasswordField` menjadi input melengkung (*curve 14px*).
+- `src/id/ac/pens/psdku/campuslosthub/view/MainFrame.java`: menghapus background putih bar navbar agar elemen mengambang di atas kanvas `#F4F5F7` dan membuat pill aktif navbar mengisi penuh tinggi kontainer pill.
+- `src/id/ac/pens/psdku/campuslosthub/view/AdminLoginDialog.java`: menggunakan `UITheme.buatPasswordField` bersudut melengkung.
+
 ### 2026-11-27 — Pembaruan Panduan Akses GUI di README.md
 
 #### Changed

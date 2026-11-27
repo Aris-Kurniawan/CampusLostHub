@@ -77,14 +77,7 @@ public class AdminLoginDialog extends JDialog {
         lblP.setForeground(UITheme.TEXT_MAIN);
         lblP.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        txtPassword = new JPasswordField(15);
-        txtPassword.setFont(UITheme.FONT_REGULAR);
-        txtPassword.setForeground(UITheme.TEXT_MAIN);
-        txtPassword.setBackground(UITheme.SURFACE_SUBTLE);
-        txtPassword.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(UITheme.BORDER, 1),
-                new EmptyBorder(6, 10, 6, 10)
-        ));
+        txtPassword = UITheme.buatPasswordField(15);
         txtPassword.setText("admin123");
         txtPassword.setAlignmentX(Component.LEFT_ALIGNMENT);
         txtPassword.setMaximumSize(new Dimension(Integer.MAX_VALUE, 36));

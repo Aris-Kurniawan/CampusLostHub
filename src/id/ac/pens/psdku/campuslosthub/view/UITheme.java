@@ -165,20 +165,78 @@ public class UITheme {
         }
     }
 
-    /** TextField modern dengan padding lega & border halus. */
+    /** TextField modern dengan sudut melengkung (curve 14px) dan padding lega. */
     public static JTextField buatTextField(int columns) {
-        JTextField tf = new JTextField(columns);
+        JTextField tf = new RoundedTextField(columns, 14);
         tf.setFont(FONT_REGULAR);
         tf.setForeground(TEXT_MAIN);
-        tf.setBackground(SURFACE_SUBTLE);
         tf.setCaretColor(PRIMARY);
-        tf.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(BORDER, 1),
-                new EmptyBorder(6, 10, 6, 10)
-        ));
+        tf.setBorder(new EmptyBorder(6, 12, 6, 12));
         Dimension pref = tf.getPreferredSize();
-        tf.setPreferredSize(new Dimension(pref.width, 34));
+        tf.setPreferredSize(new Dimension(pref.width, 36));
         return tf;
+    }
+
+    /** PasswordField modern dengan sudut melengkung (curve 14px). */
+    public static JPasswordField buatPasswordField(int columns) {
+        JPasswordField pf = new RoundedPasswordField(columns, 14);
+        pf.setFont(FONT_REGULAR);
+        pf.setForeground(TEXT_MAIN);
+        pf.setCaretColor(PRIMARY);
+        pf.setBorder(new EmptyBorder(6, 12, 6, 12));
+        Dimension pref = pf.getPreferredSize();
+        pf.setPreferredSize(new Dimension(pref.width, 36));
+        return pf;
+    }
+
+    /** JTextField kustom bersudut melengkung. */
+    public static class RoundedTextField extends JTextField {
+        private final int radius;
+
+        public RoundedTextField(int columns, int radius) {
+            super(columns);
+            this.radius = radius;
+            setOpaque(false);
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            int w = getWidth();
+            int h = getHeight();
+            g2.setColor(SURFACE_SUBTLE);
+            g2.fill(new RoundRectangle2D.Float(0, 0, w - 1, h - 1, radius, radius));
+            g2.setColor(isFocusOwner() ? CHARCOAL : BORDER);
+            g2.draw(new RoundRectangle2D.Float(0.5f, 0.5f, w - 1f, h - 1f, radius, radius));
+            g2.dispose();
+            super.paintComponent(g);
+        }
+    }
+
+    /** JPasswordField kustom bersudut melengkung. */
+    public static class RoundedPasswordField extends JPasswordField {
+        private final int radius;
+
+        public RoundedPasswordField(int columns, int radius) {
+            super(columns);
+            this.radius = radius;
+            setOpaque(false);
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            int w = getWidth();
+            int h = getHeight();
+            g2.setColor(SURFACE_SUBTLE);
+            g2.fill(new RoundRectangle2D.Float(0, 0, w - 1, h - 1, radius, radius));
+            g2.setColor(isFocusOwner() ? CHARCOAL : BORDER);
+            g2.draw(new RoundRectangle2D.Float(0.5f, 0.5f, w - 1f, h - 1f, radius, radius));
+            g2.dispose();
+            super.paintComponent(g);
+        }
     }
 
     /** Kartu statistik ringkas dengan angka besar (Finexy Bento Card). */
@@ -228,97 +286,113 @@ public class UITheme {
         return card;
     }
 
-    /** Mengaplikasikan styling modern Finexy pada JTable. */
+    /** Mengaplikasikan styling modern Finexy (Orange & White) pada JTable dengan pill melengkung. */
     public static void formatTable(JTable table) {
         table.setFont(FONT_REGULAR);
-        table.setRowHeight(42);
+        table.setRowHeight(46);
         table.setGridColor(BORDER_LIGHT);
         table.setShowVerticalLines(false);
         table.setShowHorizontalLines(true);
         table.setSelectionBackground(PRIMARY_LIGHT);
         table.setSelectionForeground(TEXT_MAIN);
         table.setIntercellSpacing(new Dimension(0, 1));
+        table.setBackground(SURFACE);
 
         JTableHeader header = table.getTableHeader();
         header.setFont(new Font("Segoe UI", Font.BOLD, 12));
         header.setBackground(SURFACE_SUBTLE);
         header.setForeground(TEXT_MUTED);
-        header.setPreferredSize(new Dimension(header.getWidth(), 40));
+        header.setPreferredSize(new Dimension(header.getWidth(), 42));
         header.setReorderingAllowed(false);
+        header.setDefaultRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable tbl, Object value,
+                                                           boolean isSelected, boolean hasFocus,
+                                                           int row, int column) {
+                JLabel lbl = (JLabel) super.getTableCellRendererComponent(
+                        tbl, value, isSelected, hasFocus, row, column);
+                lbl.setBackground(SURFACE_SUBTLE);
+                lbl.setForeground(TEXT_MUTED);
+                lbl.setFont(new Font("Segoe UI", Font.BOLD, 12));
+                lbl.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createMatteBorder(0, 0, 1, 0, BORDER_LIGHT),
+                        new EmptyBorder(0, 14, 0, 14)
+                ));
+                String text = value == null ? "" : value.toString();
+                if (column == 0 || "Kategori".equalsIgnoreCase(text) || "Status".equalsIgnoreCase(text)) {
+                    lbl.setHorizontalAlignment(SwingConstants.CENTER);
+                } else {
+                    lbl.setHorizontalAlignment(SwingConstants.LEFT);
+                }
+                return lbl;
+            }
+        });
 
         table.setDefaultRenderer(Object.class, new ModernTableCellRenderer());
     }
 
-    /** Renderer sel kustom untuk badge kategori, status, dan alignment. */
+    /** Renderer sel kustom dengan badge pill membulat (curve) ala Finexy Orange & White. */
     public static class ModernTableCellRenderer extends DefaultTableCellRenderer {
+        private Color badgeBg = null;
+        private Color badgeFg = null;
+        private String badgeText = null;
+
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value,
                                                        boolean isSelected, boolean hasFocus,
                                                        int row, int column) {
+            badgeBg = null;
+            badgeFg = null;
+            badgeText = null;
+
             JLabel lbl = (JLabel) super.getTableCellRendererComponent(
                     table, value, isSelected, hasFocus, row, column);
 
-            lbl.setBorder(new EmptyBorder(0, 12, 0, 12));
+            lbl.setBorder(new EmptyBorder(0, 14, 0, 14));
             String str = value == null ? "" : value.toString();
 
-            if (!isSelected) {
-                lbl.setBackground(SURFACE);
-            }
+            lbl.setBackground(isSelected ? PRIMARY_LIGHT : SURFACE);
 
             // Kolom ID (kolom 0)
             if (column == 0) {
                 lbl.setFont(FONT_BOLD);
-                lbl.setForeground(isSelected ? TEXT_MAIN : CHARCOAL);
+                lbl.setForeground(isSelected ? PRIMARY_DARK : CHARCOAL);
                 lbl.setHorizontalAlignment(SwingConstants.CENTER);
                 return lbl;
             }
 
-            // Kategori (ELEKTRONIK / DOKUMEN)
+            // Kategori (ELEKTRONIK / DOKUMEN) -> Pill Badge Curve
             if ("ELEKTRONIK".equalsIgnoreCase(str) || "DOKUMEN".equalsIgnoreCase(str)) {
-                lbl.setHorizontalAlignment(SwingConstants.CENTER);
-                lbl.setFont(FONT_BADGE);
+                badgeText = str.toUpperCase();
                 if ("ELEKTRONIK".equalsIgnoreCase(str)) {
-                    lbl.setText("ELEKTRONIK");
-                    if (!isSelected) {
-                        lbl.setForeground(TEXT_MUTED);
-                        lbl.setBackground(SURFACE);
-                    }
+                    badgeBg = BORDER_LIGHT;
+                    badgeFg = TEXT_SUBTLE;
                 } else {
-                    lbl.setText("DOKUMEN");
-                    if (!isSelected) {
-                        lbl.setForeground(BADGE_DOKUMEN_TEXT);
-                        lbl.setBackground(SURFACE);
-                    }
+                    badgeBg = PRIMARY_LIGHT;
+                    badgeFg = PRIMARY_DARK;
                 }
+                lbl.setText("");
                 return lbl;
             }
 
-            // Status (TERSEDIA / PROSES_KLAIM / SELESAI)
+            // Status (TERSEDIA / PROSES_KLAIM / SELESAI) -> Pill Badge Curve
             if ("TERSEDIA".equalsIgnoreCase(str)
                     || "PROSES_KLAIM".equalsIgnoreCase(str)
                     || "SELESAI".equalsIgnoreCase(str)) {
-                lbl.setHorizontalAlignment(SwingConstants.CENTER);
-                lbl.setFont(FONT_BADGE);
-
                 if ("TERSEDIA".equalsIgnoreCase(str)) {
-                    lbl.setText("● TERSEDIA");
-                    if (!isSelected) {
-                        lbl.setForeground(SUCCESS_TEXT);
-                        lbl.setBackground(SUCCESS_BG);
-                    }
+                    badgeText = "● TERSEDIA";
+                    badgeBg = SUCCESS_BG;
+                    badgeFg = SUCCESS_TEXT;
                 } else if ("PROSES_KLAIM".equalsIgnoreCase(str)) {
-                    lbl.setText("● PROSES_KLAIM");
-                    if (!isSelected) {
-                        lbl.setForeground(WARNING_TEXT);
-                        lbl.setBackground(WARNING_BG);
-                    }
+                    badgeText = "● PROSES_KLAIM";
+                    badgeBg = WARNING_BG;
+                    badgeFg = WARNING_TEXT;
                 } else {
-                    lbl.setText("● SELESAI");
-                    if (!isSelected) {
-                        lbl.setForeground(SUCCESS_TEXT);
-                        lbl.setBackground(SUCCESS_BG);
-                    }
+                    badgeText = "● SELESAI";
+                    badgeBg = SUCCESS_BG;
+                    badgeFg = SUCCESS_TEXT;
                 }
+                lbl.setText("");
                 return lbl;
             }
 
@@ -326,6 +400,31 @@ public class UITheme {
             lbl.setForeground(TEXT_MAIN);
             lbl.setHorizontalAlignment(SwingConstants.LEFT);
             return lbl;
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            if (badgeText != null && badgeBg != null && badgeFg != null) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setFont(FONT_BADGE);
+                FontMetrics fm = g2.getFontMetrics();
+                int textW = fm.stringWidth(badgeText);
+                int pillW = textW + 24;
+                int pillH = 26;
+                int px = (getWidth() - pillW) / 2;
+                int py = (getHeight() - pillH) / 2;
+
+                g2.setColor(badgeBg);
+                g2.fill(new RoundRectangle2D.Float(px, py, pillW, pillH, pillH, pillH));
+
+                g2.setColor(badgeFg);
+                int tx = px + (pillW - textW) / 2;
+                int ty = py + ((pillH - fm.getHeight()) / 2) + fm.getAscent();
+                g2.drawString(badgeText, tx, ty);
+                g2.dispose();
+            }
         }
     }
 }

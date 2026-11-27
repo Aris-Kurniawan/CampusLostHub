@@ -149,15 +149,12 @@ public class MainFrame extends JFrame {
     // =========================================================================
     private JPanel buatHeaderNavigasi() {
         JPanel header = new JPanel(new BorderLayout(12, 0));
-        header.setBackground(UITheme.SURFACE);
-        header.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createMatteBorder(0, 0, 1, 0, UITheme.BORDER),
-                new EmptyBorder(12, 18, 12, 18)
-        ));
+        header.setBackground(UITheme.BG_MAIN);
+        header.setBorder(new EmptyBorder(16, 24, 6, 24));
 
         // Kiri: Coral Dot + Brand + Badge ADMIN (muncul saat login)
         JPanel pnlLogo = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 4));
-        pnlLogo.setBackground(UITheme.SURFACE);
+        pnlLogo.setBackground(UITheme.BG_MAIN);
 
         JPanel coralDot = new UITheme.RoundedPanel(999, UITheme.PRIMARY, null);
         coralDot.setPreferredSize(new Dimension(26, 26));
@@ -178,16 +175,16 @@ public class MainFrame extends JFrame {
         pnlLogo.add(lblLogo);
         pnlLogo.add(lblTagAdmin);
 
-        // Tengah: Center Pill Container
+        // Tengah: Center Pill Container (tanpa background bar, pill aktif penuh tinggi)
         cardMenuLayout = new CardLayout();
         pnlMenuContainer = new JPanel(cardMenuLayout);
-        pnlMenuContainer.setBackground(UITheme.SURFACE);
+        pnlMenuContainer.setBackground(UITheme.BG_MAIN);
 
         // A. Menu Mahasiswa (3 Pill)
         JPanel pnlUserWrap = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
-        pnlUserWrap.setBackground(UITheme.SURFACE);
+        pnlUserWrap.setBackground(UITheme.BG_MAIN);
         JPanel pnlMenuUser = new UITheme.RoundedPanel(
-                new FlowLayout(FlowLayout.CENTER, 4, 4), 999, UITheme.SURFACE, UITheme.BORDER);
+                new FlowLayout(FlowLayout.CENTER, 0, 0), 999, UITheme.SURFACE, UITheme.BORDER);
 
         btnNavJelajah = buatNavPill("Katalog Barang");
         btnNavLapor = buatNavPill("Laporkan Temuan");
@@ -204,9 +201,9 @@ public class MainFrame extends JFrame {
 
         // B. Menu Petugas Pos (4 Pill)
         JPanel pnlAdminWrap = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
-        pnlAdminWrap.setBackground(UITheme.SURFACE);
+        pnlAdminWrap.setBackground(UITheme.BG_MAIN);
         JPanel pnlMenuAdmin = new UITheme.RoundedPanel(
-                new FlowLayout(FlowLayout.CENTER, 4, 4), 999, UITheme.SURFACE, UITheme.BORDER);
+                new FlowLayout(FlowLayout.CENTER, 0, 0), 999, UITheme.SURFACE, UITheme.BORDER);
 
         btnNavAdminDashboard = buatNavPill("Dashboard Kendali");
         btnNavAdminVerifikasi = buatNavPill("Verifikasi Klaim");
@@ -229,7 +226,7 @@ public class MainFrame extends JFrame {
 
         // Kanan: Tombol Masuk/Keluar Petugas
         JPanel pnlKanan = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 2));
-        pnlKanan.setBackground(UITheme.SURFACE);
+        pnlKanan.setBackground(UITheme.BG_MAIN);
 
         lblUserRole = new JLabel("");
         lblUserRole.setFont(UITheme.FONT_SMALL);
@@ -252,7 +249,7 @@ public class MainFrame extends JFrame {
     private UITheme.PillButton buatNavPill(String teks) {
         UITheme.PillButton btn = new UITheme.PillButton(teks, UITheme.SURFACE, UITheme.TEXT_MUTED, null);
         btn.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        btn.setBorder(new EmptyBorder(6, 12, 6, 12));
+        btn.setBorder(new EmptyBorder(9, 16, 9, 16));
         return btn;
     }
 
