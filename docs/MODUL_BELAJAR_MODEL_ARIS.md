@@ -137,6 +137,13 @@ item.setStatus(Item.STATUS_PROSES_KLAIM);
 
 `id`, `nama`, deskripsi, lokasi, dan tanggal tidak boleh berubah setelah object dibuat. `status` tidak final karena status memang berubah selama proses klaim.
 
+### Relasi In-Memory `Claimant` pada `Item`
+
+`Item` juga menyimpan relasi objek `private Claimant claimant;` beserta `getClaimant()` dan `setClaimant(Claimant claimant)`:
+
+- Field `claimant` tidak memakai `final` karena nilainya diisi saat mahasiswa mengajukan klaim (`claimItem`), dibersihkan menjadi `null` jika klaim dibatalkan (`cancelClaim`), dan tetap tersimpan di memori agar panel **Verifikasi Klaim** dan **Riwayat Selesai** bisa menampilkan identitas pemohon.
+- Relasi ini hanya hidup di memori selama sesi berjalan dan **tidak mengubah format 9 kolom `lost_found_data.csv`**.
+
 ### Demo perubahan sederhana
 
 Tambahkan validasi ke constructor:
