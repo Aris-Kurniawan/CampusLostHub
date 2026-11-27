@@ -54,6 +54,10 @@ Then review that plan against the brief before building: if any part of it reads
 
 When writing the code, be careful of structuring your CSS selector specificities. It's easy to generate CSS classes that cancel each other out (especially with a type-based selector like .section and an element-based selector like .cta). This can happen often with padding/margin between sections.
 
+## Iconography Rule
+
+- Always fetch and use production vector icons from **Iconify** (`lucide:<name>` via `https://api.iconify.design/lucide.json?icons=...` or `@iconify/react` / `lucide-react`), matching the visual weight and style of the target UI. Never use emojis or generic hand-drawn placeholder SVGs for UI controls.
+
 ## Restraint and self-critique
 
 Spend your boldness in one place. Let one element be the memorable thing, keep everything around it quiet and disciplined, and cut any decoration that does not serve the brief. Build to a quality floor without announcing it: responsive down to mobile, visible keyboard focus, reduced motion respected, visually accessible, harmonious color palettes. Critique your own work as you build, taking screenshots to review if your environment supports it — a picture is worth 1000 tokens. Consider Chanel's advice: before leaving the house, take a look in the mirror and remove one accessory. Human creatives have memory and always try to do something new, so if you have a space to quickly jot down notes about what you've tried, it can help you in future passes.
