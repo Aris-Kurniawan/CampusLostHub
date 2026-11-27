@@ -85,7 +85,7 @@ cd CampusLostHub
 
 # 2. Kompilasi seluruh file Java ke direktori bin/
 $files = Get-ChildItem -Path src -Recurse -Filter *.java | ForEach-Object { $_.FullName }
-javac -d bin $files
+javac -d bin -encoding UTF-8 $files
 
 # 3. Jalankan aplikasi GUI Java Swing
 java -cp bin id.ac.pens.psdku.campuslosthub.Main
@@ -94,7 +94,7 @@ java -cp bin id.ac.pens.psdku.campuslosthub.Main
 #### Melalui Command Prompt (CMD) / Linux / macOS (Bash):
 ```bash
 # 1. Kompilasi semua file Java
-javac -d bin src/id/ac/pens/psdku/campuslosthub/*.java src/id/ac/pens/psdku/campuslosthub/*/*.java
+javac -d bin -encoding UTF-8 src/id/ac/pens/psdku/campuslosthub/*.java src/id/ac/pens/psdku/campuslosthub/*/*.java
 
 # 2. Jalankan aplikasi GUI Java Swing
 java -cp bin id.ac.pens.psdku.campuslosthub.Main
@@ -124,7 +124,20 @@ java -cp bin UISelfCheck
 
 ---
 
-### D. Akun Pengujian Panel Petugas Pos / Administrator
-Untuk menguji fitur verifikasi fisik, serah terima, dan kelola data inventaris di **Panel Petugas Pos**:
-* **Username:** `admin` (atau `petugas`)
-* **Password:** `admin123` (atau `petugas123`)
+### D. Akun Pengujian & Panduan Akses GUI (Panel Mahasiswa vs Petugas Pos)
+
+1. **Mode Mahasiswa (Default saat aplikasi dibuka — tanpa login):**
+   * **Katalog Barang:** Melihat ringkasan KPI, mencari/memfilter barang temuan aktif, dan mengajukan klaim kepemilikan lewat tombol **`Ajukan Klaim`** (mendukung lampiran foto bukti unik opsional).
+   * **Laporkan Temuan:** Melihat daftar temuan tercatat dan membuat laporan baru lewat tombol **`+ Buat Laporan Barang Temuan`**.
+   * **Panduan Lapor & Klaim:** Panduan 3 langkah pelaporan, pengajuan klaim, dan verifikasi di Pos Satpam.
+
+2. **Mode Petugas Pos / Administrator:**
+   * Klik tombol **`Masuk Petugas Pos`** di pojok kanan atas navbar, lalu masukkan akun pengujian:
+     * **Username:** `admin` (atau `petugas`)
+     * **Password:** `admin123` (atau `petugas123`)
+   * Setelah masuk, tersedia **4 halaman khusus petugas**:
+     * **Dashboard Kendali:** Ringkasan statistik (`TOTAL BARANG`, `TERSEDIA`, `PROSES KLAIM`, `SELESAI`) dan tabel antrean klaim aktif.
+     * **Verifikasi Klaim:** Validasi identitas pemohon (`Claimant`), 3 checklist fisik KTM, unggah foto bukti serah terima, dan **`Buka Kanvas TTD`** (`SignatureDialog`) untuk tanda tangan berita acara mahasiswa.
+     * **Semua Inventaris:** Daftar seluruh barang internal beserta atribut rahasia (`SN/IMEI` atau `NIM/Pemilik`), tombol **`+ Input Temuan (Petugas)`**, dan hapus item.
+     * **Riwayat Selesai:** Arsip barang yang sudah berstatus `SELESAI`.
+   * Untuk kembali ke tampilan mahasiswa, klik tombol **`Keluar Mode Petugas`** di pojok kanan atas.

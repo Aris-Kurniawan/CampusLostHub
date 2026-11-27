@@ -6,6 +6,11 @@ Format versi mengikuti tahap pengerjaan proyek, bukan klaim rilis produk.
 
 ## [Unreleased]
 
+### 2026-11-27 — Pembaruan Panduan Akses GUI di README.md
+
+#### Changed
+- `README.md`: menambahkan `-encoding UTF-8` pada perintah kompilasi `javac` serta mendokumentasikan panduan akses GUI Mode Mahasiswa (3 layar) dan Mode Petugas Pos (4 layar + kanvas TTD & akun login).
+
 ### 2026-11-27 — Implementasi Desain FigCraft (Finexy) ke Frontend Java Swing
 
 #### Added
