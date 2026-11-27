@@ -144,6 +144,7 @@ public class LostAndFoundManager {
         }
 
         item.setStatus(Item.STATUS_PROSES_KLAIM);
+        item.setClaimant(claimant);
         simpanKeFile();
         return true;
     }
@@ -170,6 +171,7 @@ public class LostAndFoundManager {
         }
 
         item.setStatus(Item.STATUS_TERSEDIA);
+        item.setClaimant(null);
         simpanKeFile();
         return true;
     }

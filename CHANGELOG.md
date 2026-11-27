@@ -6,6 +6,33 @@ Format versi mengikuti tahap pengerjaan proyek, bukan klaim rilis produk.
 
 ## [Unreleased]
 
+### 2026-11-27 — Implementasi Desain FigCraft (Finexy) ke Frontend Java Swing
+
+#### Added
+- `src/id/ac/pens/psdku/campuslosthub/view/SignatureDialog.java`: modal kanvas tanda tangan interaktif untuk berita acara serah terima barang di Pos Satpam.
+
+#### Changed
+- `src/id/ac/pens/psdku/campuslosthub/view/UITheme.java`: menerapkan palet Finexy (`#F4F5F7` canvas, `#171717` charcoal pill CTA, `#F05423` coral focal accent, `#FFF7ED` highlight callout) beserta `RoundedPanel`, `PillButton`, `buatKpiCard`, serta tinggi standar `34px` pada `buatTextField`.
+- `src/id/ac/pens/psdku/campuslosthub/view/AdminLoginDialog.java`: memperbaiki ukuran dialog (`460x460`), menggunakan `BoxLayout` agar input `Username` & `Password` tidak terpotong vertikal, serta mencegah teks tombol `"Masuk ke Panel Petugas"` terpotong.
+- `src/id/ac/pens/psdku/campuslosthub/view/ClaimDialog.java`: menyelaraskan UI modal klaim, menambahkan unggah foto/bukti unik opsional via `JFileChooser`, dan `JScrollPane` vertikal agar seluruh form dapat di-scroll.
+- `src/id/ac/pens/psdku/campuslosthub/view/LaporBarangDialog.java`: menyelaraskan UI form laporan dengan kotak highlight coral untuk atribut rahasia dinamis serta menambahkan `JScrollPane` vertikal.
+- `src/id/ac/pens/psdku/campuslosthub/view/MainFrame.java`: mengimplementasikan navbar pill dinamis, 3 layar mahasiswa (*Katalog Barang*, *Laporkan Temuan*, *Panduan Lapor & Klaim*), serta 4 layar petugas (*Dashboard Kendali*, *Verifikasi Klaim*, *Semua Inventaris*, *Riwayat Selesai*).
+
+#### Tests
+- Kompilasi: `javac -d out -encoding UTF-8 (seluruh source code src)` -> Berhasil.
+- `git diff --check` -> Bersih.
+
+### 2026-11-27 — Relasi In-Memory Claimant pada Item & Tampilan Pemohon di Verifikasi Pos
+
+#### Changed
+- `src/id/ac/pens/psdku/campuslosthub/model/Item.java`: menambahkan field `claimant` beserta `getClaimant()` dan `setClaimant(Claimant)` untuk menyimpan relasi pemohon di memori tanpa mengubah format 9 kolom CSV.
+- `src/id/ac/pens/psdku/campuslosthub/service/LostAndFoundManager.java`: menyimpan `claimant` ke objek `Item` saat `claimItem(...)` berhasil dan mereset ke `null` saat `cancelClaim(...)`.
+- `src/id/ac/pens/psdku/campuslosthub/view/MainFrame.java`: menampilkan nama, NIM, dan nomor HP/WA pemohon (`Claimant`) pada panel detail `Verifikasi Klaim & Pos`.
+
+#### Tests
+- Kompilasi: `javac -d out -encoding UTF-8 (seluruh source code src)` -> Berhasil.
+- `git diff --check` -> Bersih.
+
 ### 2026-11-23 — Penyelarasan Layar Laporkan Temuan Berbasis Model Tabel & Dialog
 
 #### Added

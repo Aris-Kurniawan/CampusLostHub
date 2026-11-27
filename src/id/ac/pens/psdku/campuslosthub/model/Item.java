@@ -14,6 +14,7 @@ public abstract class Item implements Verifiable {
     private final String lokasiDitemukan;
     private final String tanggalDitemukan;
     private String status;
+    private Claimant claimant;
 
     protected Item(String id, String nama, String deskripsi,
                    String lokasiDitemukan, String tanggalDitemukan) {
@@ -38,6 +39,8 @@ public abstract class Item implements Verifiable {
     public String getLokasiDitemukan() { return lokasiDitemukan; }
     public String getTanggalDitemukan() { return tanggalDitemukan; }
     public String getStatus() { return status; }
+    public Claimant getClaimant() { return claimant; }
+    public void setClaimant(Claimant claimant) { this.claimant = claimant; }
 
     public void setStatus(String statusBaru) {
         if (!statusValid(statusBaru)) {

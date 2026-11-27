@@ -5,7 +5,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 /**
- * Dialog Login Petugas / Administrator CampusLostHub sesuai Mockup 5.
+ * Dialog Login Petugas / Administrator CampusLostHub (Finexy Design).
  * Menggunakan autentikasi sederhana (admin / admin123).
  */
 public class AdminLoginDialog extends JDialog {
@@ -17,23 +17,23 @@ public class AdminLoginDialog extends JDialog {
 
     public AdminLoginDialog(Frame owner) {
         super(owner, "Login Petugas / Administrator", true);
-        setSize(420, 430);
+        setSize(460, 460);
         setLocationRelativeTo(owner);
         setResizable(false);
         initUI();
     }
 
     private void initUI() {
-        JPanel contentPane = new JPanel(new BorderLayout(15, 15));
+        JPanel contentPane = new JPanel(new BorderLayout(15, 16));
         contentPane.setBackground(UITheme.BG_MAIN);
-        contentPane.setBorder(new EmptyBorder(24, 24, 24, 24));
+        contentPane.setBorder(new EmptyBorder(24, 26, 24, 26));
 
-        // Header Card
+        // Header
         JPanel pnlHeader = new JPanel(new GridLayout(0, 1, 4, 4));
         pnlHeader.setBackground(UITheme.BG_MAIN);
 
-        JLabel lblLogo = new JLabel("🛡️ CampusLostHub", SwingConstants.CENTER);
-        lblLogo.setFont(UITheme.FONT_TITLE);
+        JLabel lblLogo = new JLabel("CampusLostHub", SwingConstants.CENTER);
+        lblLogo.setFont(new Font("Segoe UI", Font.BOLD, 20));
         lblLogo.setForeground(UITheme.PRIMARY);
 
         JLabel lblSub = new JLabel("Smart Campus Lost & Found System • PENS", SwingConstants.CENTER);
@@ -49,45 +49,65 @@ public class AdminLoginDialog extends JDialog {
         pnlHeader.add(Box.createVerticalStrut(4));
         pnlHeader.add(lblTitle);
 
-        // Form Card
+        // Form Card (BoxLayout agar tinggi input field konsisten & tidak terpotong)
         JPanel card = UITheme.buatCardPanel();
-        card.setLayout(new GridLayout(0, 1, 6, 6));
+        card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
 
         lblError = new JLabel(" ");
         lblError.setFont(UITheme.FONT_SMALL);
         lblError.setForeground(UITheme.DANGER_TEXT);
         lblError.setOpaque(true);
         lblError.setBackground(UITheme.SURFACE);
+        lblError.setAlignmentX(Component.LEFT_ALIGNMENT);
+        lblError.setMaximumSize(new Dimension(Integer.MAX_VALUE, 24));
+
+        JLabel lblU = new JLabel("Username Petugas");
+        lblU.setFont(UITheme.FONT_BOLD);
+        lblU.setForeground(UITheme.TEXT_MAIN);
+        lblU.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         txtUsername = UITheme.buatTextField(15);
-        txtUsername.setText("admin"); // default kemudahan pengujian
+        txtUsername.setText("admin");
+        txtUsername.setAlignmentX(Component.LEFT_ALIGNMENT);
+        txtUsername.setMaximumSize(new Dimension(Integer.MAX_VALUE, 36));
+        txtUsername.setPreferredSize(new Dimension(360, 36));
+
+        JLabel lblP = new JLabel("Password");
+        lblP.setFont(UITheme.FONT_BOLD);
+        lblP.setForeground(UITheme.TEXT_MAIN);
+        lblP.setAlignmentX(Component.LEFT_ALIGNMENT);
+
         txtPassword = new JPasswordField(15);
         txtPassword.setFont(UITheme.FONT_REGULAR);
+        txtPassword.setForeground(UITheme.TEXT_MAIN);
+        txtPassword.setBackground(UITheme.SURFACE_SUBTLE);
         txtPassword.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(UITheme.BORDER, 1),
                 new EmptyBorder(6, 10, 6, 10)
         ));
         txtPassword.setText("admin123");
-
-        JLabel lblU = new JLabel("Username Petugas");
-        lblU.setFont(UITheme.FONT_BOLD);
-        JLabel lblP = new JLabel("Password");
-        lblP.setFont(UITheme.FONT_BOLD);
+        txtPassword.setAlignmentX(Component.LEFT_ALIGNMENT);
+        txtPassword.setMaximumSize(new Dimension(Integer.MAX_VALUE, 36));
+        txtPassword.setPreferredSize(new Dimension(360, 36));
 
         card.add(lblError);
+        card.add(Box.createVerticalStrut(6));
         card.add(lblU);
+        card.add(Box.createVerticalStrut(6));
         card.add(txtUsername);
+        card.add(Box.createVerticalStrut(12));
         card.add(lblP);
+        card.add(Box.createVerticalStrut(6));
         card.add(txtPassword);
 
-        // Tombol Masuk
-        JButton btnLogin = UITheme.buatTombol("Masuk ke Panel Petugas", UITheme.PRIMARY, Color.WHITE);
-        btnLogin.addActionListener(e -> attemptLogin());
-
-        JButton btnBatal = UITheme.buatTombolOutline("Batal", UITheme.TEXT_MUTED);
+        // Tombol Masuk (FlowLayout / Border agar teks tombol tidak terpotong)
+        JButton btnBatal = UITheme.buatTombolOutline("Batal", UITheme.TEXT_MAIN);
         btnBatal.addActionListener(e -> dispose());
 
-        JPanel pnlAksi = new JPanel(new GridLayout(1, 2, 8, 0));
+        JButton btnLogin = UITheme.buatTombol("Masuk ke Panel Petugas", UITheme.CHARCOAL, Color.WHITE);
+        btnLogin.addActionListener(e -> attemptLogin());
+
+        JPanel pnlAksi = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         pnlAksi.setBackground(UITheme.BG_MAIN);
         pnlAksi.add(btnBatal);
         pnlAksi.add(btnLogin);
@@ -96,7 +116,6 @@ public class AdminLoginDialog extends JDialog {
         contentPane.add(card, BorderLayout.CENTER);
         contentPane.add(pnlAksi, BorderLayout.SOUTH);
 
-        // Enter to login
         getRootPane().setDefaultButton(btnLogin);
         setContentPane(contentPane);
     }

@@ -7,11 +7,13 @@ import id.ac.pens.psdku.campuslosthub.service.LostAndFoundManager;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 
 /**
- * Modal Dialog "Ajukan Klaim Barang" sesuai desain wireframe dan spesifikasi.
- * Mengeliminasi input ID manual karena ID dan data barang sudah terisi otomatis.
+ * Modal Dialog "Ajukan Klaim Barang" sesuai desain FigCraft (Screen 2).
+ * Mengeliminasi input ID manual karena ID dan data barang sudah terisi otomatis,
+ * serta menyediakan unggah foto/bukti unik opsional sebagai lampiran pendukung.
  */
 public class ClaimDialog extends JDialog {
 
@@ -23,6 +25,7 @@ public class ClaimDialog extends JDialog {
     private JTextField txtNim;
     private JTextField txtNoHp;
     private JTextField txtBukti;
+    private JLabel lblFotoUnik;
     private JCheckBox chkSetuju;
 
     public ClaimDialog(Frame owner, LostAndFoundManager manager, Item item) {
@@ -30,59 +33,56 @@ public class ClaimDialog extends JDialog {
         this.manager = manager;
         this.item = item;
 
-        setSize(520, 560);
+        setSize(540, 650);
         setLocationRelativeTo(owner);
         setResizable(false);
         initUI();
     }
 
     private void initUI() {
-        JPanel contentPane = new JPanel(new BorderLayout(15, 15));
+        JPanel contentPane = new JPanel(new BorderLayout(14, 14));
         contentPane.setBackground(UITheme.BG_MAIN);
         contentPane.setBorder(new EmptyBorder(20, 24, 20, 24));
 
         // Header Dialog
-        JPanel headerPanel = new JPanel(new BorderLayout(5, 5));
+        JPanel headerPanel = new JPanel(new BorderLayout(5, 4));
         headerPanel.setBackground(UITheme.BG_MAIN);
 
         JLabel lblTitle = new JLabel("Ajukan Klaim Barang");
         lblTitle.setFont(UITheme.FONT_TITLE);
         lblTitle.setForeground(UITheme.TEXT_MAIN);
 
-        JLabel lblSub = new JLabel("Verifikasi kepemilikan barang sebelum mengambil di pos pengamanan");
+        JLabel lblSub = new JLabel("Verifikasi kepemilikan barang sebelum mengambil di Pos Keamanan Kampus");
         lblSub.setFont(UITheme.FONT_SMALL);
         lblSub.setForeground(UITheme.TEXT_MUTED);
 
         headerPanel.add(lblTitle, BorderLayout.NORTH);
         headerPanel.add(lblSub, BorderLayout.CENTER);
 
-        // Preview Card Barang Terpilih
-        JPanel cardPreview = new JPanel(new BorderLayout(10, 5));
-        cardPreview.setBackground(UITheme.PRIMARY_LIGHT);
-        cardPreview.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(191, 219, 254), 1),
-                new EmptyBorder(12, 14, 12, 14)
-        ));
+        // Preview Card Barang Terpilih (Soft Coral Callout)
+        JPanel cardPreview = new UITheme.RoundedPanel(
+                new BorderLayout(10, 6), 14, UITheme.PRIMARY_LIGHT, UITheme.CORAL_BORDER);
+        cardPreview.setBorder(new EmptyBorder(12, 16, 12, 16));
 
         JLabel lblItemNama = new JLabel(item.getNama());
         lblItemNama.setFont(UITheme.FONT_BOLD);
         lblItemNama.setForeground(UITheme.PRIMARY_DARK);
 
         JPanel pnlInfoPreview = new JPanel(new GridLayout(0, 1, 2, 2));
-        pnlInfoPreview.setBackground(UITheme.PRIMARY_LIGHT);
+        pnlInfoPreview.setOpaque(false);
 
         JLabel lblItemLokasi = new JLabel("Lokasi: " + item.getLokasiDitemukan() + " (" + item.getKategori() + ")");
         lblItemLokasi.setFont(UITheme.FONT_SMALL);
-        lblItemLokasi.setForeground(UITheme.TEXT_MUTED);
+        lblItemLokasi.setForeground(UITheme.TEXT_SUBTLE);
 
         JLabel lblItemDeskripsi = new JLabel("Deskripsi: " + item.getDeskripsi());
         lblItemDeskripsi.setFont(UITheme.FONT_SMALL);
-        lblItemDeskripsi.setForeground(UITheme.TEXT_MUTED);
+        lblItemDeskripsi.setForeground(UITheme.TEXT_SUBTLE);
 
         pnlInfoPreview.add(lblItemLokasi);
         pnlInfoPreview.add(lblItemDeskripsi);
 
-        JLabel lblBadgeId = new JLabel(" " + item.getId() + " ");
+        JLabel lblBadgeId = new JLabel("  " + item.getId() + "  ");
         lblBadgeId.setFont(UITheme.FONT_BADGE);
         lblBadgeId.setOpaque(true);
         lblBadgeId.setBackground(UITheme.PRIMARY);
@@ -102,8 +102,8 @@ public class ClaimDialog extends JDialog {
         txtBukti = UITheme.buatTextField(20);
 
         String petunjukBukti = "ELEKTRONIK".equalsIgnoreCase(item.getKategori())
-                ? "Serial Number / IMEI perangkat:"
-                : "Nomor Identitas (NIM) atau Nama Lengkap pada dokumen:";
+                ? "Serial Number / IMEI perangkat"
+                : "NIM atau Nama Lengkap pada dokumen";
 
         formCard.add(createFieldLabel("Nama Lengkap Pemohon *"));
         formCard.add(txtNama);
@@ -111,10 +111,28 @@ public class ClaimDialog extends JDialog {
         formCard.add(txtNim);
         formCard.add(createFieldLabel("Nomor WhatsApp / HP Aktif (08...) *"));
         formCard.add(txtNoHp);
-        formCard.add(createFieldLabel("Ciri Khusus / Bukti Rahasia (" + petunjukBukti + ") *"));
+        formCard.add(createFieldLabel("Bukti Rahasia (" + petunjukBukti + ") *"));
         formCard.add(txtBukti);
 
-        chkSetuju = new JCheckBox("Saya bersedia menunjukkan kartu identitas fisik asli di pos keamanan.");
+        // Upload Foto / Bukti Unik (Opsional) - Screen 2 FigCraft
+        formCard.add(createFieldLabel("Foto / Bukti Kepemilikan Unik (Opsional)"));
+        JPanel pnlFoto = new UITheme.RoundedPanel(
+                new BorderLayout(10, 0), 10, UITheme.SURFACE_SUBTLE, UITheme.BORDER);
+        pnlFoto.setBorder(new EmptyBorder(8, 12, 8, 12));
+
+        lblFotoUnik = new JLabel("Belum ada file dipilih (.jpg / .png)");
+        lblFotoUnik.setFont(UITheme.FONT_SMALL);
+        lblFotoUnik.setForeground(UITheme.TEXT_MUTED);
+
+        JButton btnPilihFoto = UITheme.buatTombolOutline("Pilih Foto", UITheme.TEXT_MAIN);
+        btnPilihFoto.setFont(UITheme.FONT_BADGE);
+        btnPilihFoto.addActionListener(e -> pilihFotoBukti());
+
+        pnlFoto.add(lblFotoUnik, BorderLayout.CENTER);
+        pnlFoto.add(btnPilihFoto, BorderLayout.EAST);
+        formCard.add(pnlFoto);
+
+        chkSetuju = new JCheckBox("Saya bersedia menunjukkan kartu identitas fisik asli (KTM) di Pos Satpam.");
         chkSetuju.setFont(UITheme.FONT_SMALL);
         chkSetuju.setBackground(UITheme.SURFACE);
         chkSetuju.setForeground(UITheme.TEXT_MUTED);
@@ -124,26 +142,42 @@ public class ClaimDialog extends JDialog {
         JPanel pnlTombol = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         pnlTombol.setBackground(UITheme.BG_MAIN);
 
-        JButton btnBatal = UITheme.buatTombolOutline("Batal", UITheme.TEXT_MUTED);
+        JButton btnBatal = UITheme.buatTombolOutline("Batal", UITheme.TEXT_MAIN);
         btnBatal.addActionListener(e -> dispose());
 
-        JButton btnKirim = UITheme.buatTombol("Ajukan Klaim", UITheme.PRIMARY, Color.WHITE);
+        JButton btnKirim = UITheme.buatTombol("Verifikasi & Ajukan Klaim", UITheme.CHARCOAL, Color.WHITE);
         btnKirim.addActionListener(e -> prosesKlaim());
 
         pnlTombol.add(btnBatal);
         pnlTombol.add(btnKirim);
 
         // Gabungkan ke Content Pane
-        JPanel pnlTengah = new JPanel(new BorderLayout(0, 10));
+        JPanel pnlTengah = new JPanel(new BorderLayout(0, 12));
         pnlTengah.setBackground(UITheme.BG_MAIN);
         pnlTengah.add(cardPreview, BorderLayout.NORTH);
         pnlTengah.add(formCard, BorderLayout.CENTER);
 
+        JScrollPane scrollTengah = new JScrollPane(pnlTengah);
+        scrollTengah.setBorder(null);
+        scrollTengah.getViewport().setBackground(UITheme.BG_MAIN);
+        scrollTengah.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollTengah.getVerticalScrollBar().setUnitIncrement(16);
+
         contentPane.add(headerPanel, BorderLayout.NORTH);
-        contentPane.add(pnlTengah, BorderLayout.CENTER);
+        contentPane.add(scrollTengah, BorderLayout.CENTER);
         contentPane.add(pnlTombol, BorderLayout.SOUTH);
 
         setContentPane(contentPane);
+    }
+
+    private void pilihFotoBukti() {
+        JFileChooser fc = new JFileChooser();
+        fc.setDialogTitle("Pilih Foto / Bukti Kepemilikan Unik");
+        fc.setFileFilter(new FileNameExtensionFilter("Gambar (*.jpg, *.jpeg, *.png)", "jpg", "jpeg", "png"));
+        if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            lblFotoUnik.setText("Terpilih: " + fc.getSelectedFile().getName());
+            lblFotoUnik.setForeground(UITheme.SUCCESS_TEXT);
+        }
     }
 
     private JLabel createFieldLabel(String text) {
@@ -159,7 +193,6 @@ public class ClaimDialog extends JDialog {
         String noHp = txtNoHp.getText().trim();
         String bukti = txtBukti.getText().trim();
 
-        // Validasi form
         if (nama.isEmpty()) {
             tampilkanError("Nama pemohon wajib diisi.");
             txtNama.requestFocus();
@@ -187,7 +220,6 @@ public class ClaimDialog extends JDialog {
         }
 
         try {
-            // Menjalankan proses klaim polimorfik melalui LostAndFoundManager
             Claimant claimant = new Claimant(nama, nim, noHp);
             manager.claimItem(item.getId(), claimant, bukti);
 
@@ -195,7 +227,7 @@ public class ClaimDialog extends JDialog {
             JOptionPane.showMessageDialog(this,
                     "Klaim berhasil diverifikasi!\n"
                             + "Status barang " + item.getId() + " kini: PROSES_KLAIM.\n\n"
-                            + "Silakan datang ke Pos Keamanan Kampus dengan membawa identitas fisik asli.",
+                            + "Silakan datang ke Pos Keamanan Kampus dengan membawa identitas fisik asli (KTM).",
                     "Klaim Diterima", JOptionPane.INFORMATION_MESSAGE);
             dispose();
         } catch (InvalidClaimException ex) {

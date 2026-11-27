@@ -10,8 +10,8 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 /**
- * Modal Dialog untuk input pelaporan barang temuan baru.
- * Ditampilkan saat tombol [+ Buat Laporan Barang Temuan] diklik.
+ * Modal Dialog untuk input pelaporan barang temuan baru (Screen 6 Finexy).
+ * Menampilkan bidang rahasia dinamis dalam kotak highlight coral sesuai kategori.
  */
 public class LaporBarangDialog extends JDialog {
 
@@ -28,12 +28,13 @@ public class LaporBarangDialog extends JDialog {
     private JTextField txtDetail2;
     private JLabel lblDetail1;
     private JLabel lblDetail2;
+    private JLabel lblKhususHeader;
 
     public LaporBarangDialog(Frame owner, LostAndFoundManager manager) {
-        super(owner, "Formulir Laporan Barang Temuan Kampus", true);
+        super(owner, "Formulir Pelaporan Barang Temuan", true);
         this.manager = manager;
 
-        setSize(540, 600);
+        setSize(560, 650);
         setLocationRelativeTo(owner);
         setResizable(false);
         initUI();
@@ -48,11 +49,11 @@ public class LaporBarangDialog extends JDialog {
         JPanel headerPanel = new JPanel(new GridLayout(0, 1, 4, 4));
         headerPanel.setBackground(UITheme.BG_MAIN);
 
-        JLabel lblTitle = new JLabel("Formulir Laporan Barang Temuan");
+        JLabel lblTitle = new JLabel("Formulir Pelaporan Barang Temuan");
         lblTitle.setFont(UITheme.FONT_TITLE);
         lblTitle.setForeground(UITheme.TEXT_MAIN);
 
-        JLabel lblSub = new JLabel("Catat barang temuan di area kampus PENS secara cepat dan ringkas.");
+        JLabel lblSub = new JLabel("ID unik (BRG-XXXX) diterbitkan otomatis dengan status awal TERSEDIA.");
         lblSub.setFont(UITheme.FONT_SMALL);
         lblSub.setForeground(UITheme.TEXT_MUTED);
 
@@ -61,11 +62,12 @@ public class LaporBarangDialog extends JDialog {
 
         // Form Container
         JPanel cardForm = UITheme.buatCardPanel();
-        cardForm.setLayout(new GridLayout(0, 1, 6, 6));
+        cardForm.setLayout(new BoxLayout(cardForm, BoxLayout.Y_AXIS));
 
         // Radio Pilihan Kategori
         JPanel pnlRadio = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         pnlRadio.setBackground(UITheme.SURFACE);
+        pnlRadio.setAlignmentX(Component.LEFT_ALIGNMENT);
         rbElektronik = new JRadioButton("Barang Elektronik", true);
         rbDokumen = new JRadioButton("Barang Dokumen", false);
         rbElektronik.setFont(UITheme.FONT_BOLD);
@@ -83,41 +85,60 @@ public class LaporBarangDialog extends JDialog {
         txtDeskripsi = UITheme.buatTextField(20);
 
         cbLokasi = new JComboBox<>(new String[]{
-                "Lab Pemrograman", "Lab Jaringan", "Kantin Pusat",
+                "Lab Pemrograman", "Lab Jaringan", "Kantin PSDKU",
                 "Perpustakaan Lt. 2", "Gedung D4 Lt. 1", "Masjid Kampus",
                 "Parkir Motor Barat", "Pos Keamanan Utama"
         });
         cbLokasi.setEditable(true);
         cbLokasi.setFont(UITheme.FONT_REGULAR);
         cbLokasi.setBackground(UITheme.SURFACE);
+        cbLokasi.setMaximumSize(new Dimension(Integer.MAX_VALUE, 36));
+        cbLokasi.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         txtTanggal = UITheme.buatTextField(20);
         txtTanggal.setText(ViewUtil.tanggalHariIni());
 
+        // Kotak Callout Coral untuk Bidang Khusus Rahasia
+        JPanel pnlKhusus = new UITheme.RoundedPanel(
+                new GridLayout(0, 1, 4, 4), 12, UITheme.PRIMARY_LIGHT, UITheme.CORAL_BORDER);
+        pnlKhusus.setBorder(new EmptyBorder(12, 14, 12, 14));
+        pnlKhusus.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        lblKhususHeader = new JLabel("BIDANG KHUSUS ELEKTRONIK (Atribut Rahasia Verifikasi)");
+        lblKhususHeader.setFont(UITheme.FONT_BADGE);
+        lblKhususHeader.setForeground(UITheme.PRIMARY_DARK);
+
         txtDetail1 = UITheme.buatTextField(20);
         txtDetail2 = UITheme.buatTextField(20);
-        lblDetail1 = new JLabel("Serial Number / IMEI (Bukti Rahasia) *");
+        lblDetail1 = new JLabel("Serial Number / IMEI (Rahasia) *");
         lblDetail1.setFont(UITheme.FONT_BOLD);
+        lblDetail1.setForeground(UITheme.PRIMARY_DARK);
         lblDetail2 = new JLabel("Brand / Merk *");
         lblDetail2.setFont(UITheme.FONT_BOLD);
+        lblDetail2.setForeground(UITheme.PRIMARY_DARK);
+
+        pnlKhusus.add(lblKhususHeader);
+        pnlKhusus.add(lblDetail1);
+        pnlKhusus.add(txtDetail1);
+        pnlKhusus.add(lblDetail2);
+        pnlKhusus.add(txtDetail2);
 
         rbElektronik.addActionListener(e -> updateFieldDinamis());
         rbDokumen.addActionListener(e -> updateFieldDinamis());
 
-        cardForm.add(createFieldLabel("Kategori Barang *"));
+        addRow(cardForm, createFieldLabel("Kategori Barang *"), 4);
         cardForm.add(pnlRadio);
-        cardForm.add(createFieldLabel("Nama Barang Temuan *"));
-        cardForm.add(txtNama);
-        cardForm.add(createFieldLabel("Deskripsi Fisik & Ciri Karakteristik *"));
-        cardForm.add(txtDeskripsi);
-        cardForm.add(createFieldLabel("Lokasi Ditemukan di Kampus *"));
+        cardForm.add(Box.createVerticalStrut(8));
+        addRow(cardForm, createFieldLabel("Nama Barang Temuan *"), 4);
+        addField(cardForm, txtNama, 8);
+        addRow(cardForm, createFieldLabel("Deskripsi Ciri Fisik Umum *"), 4);
+        addField(cardForm, txtDeskripsi, 8);
+        addRow(cardForm, createFieldLabel("Lokasi Ditemukan di Kampus *"), 4);
         cardForm.add(cbLokasi);
-        cardForm.add(createFieldLabel("Tanggal Ditemukan (M/d/yyyy) *"));
-        cardForm.add(txtTanggal);
-        cardForm.add(lblDetail1);
-        cardForm.add(txtDetail1);
-        cardForm.add(lblDetail2);
-        cardForm.add(txtDetail2);
+        cardForm.add(Box.createVerticalStrut(8));
+        addRow(cardForm, createFieldLabel("Tanggal Ditemukan (M/d/yyyy) *"), 4);
+        addField(cardForm, txtTanggal, 12);
+        cardForm.add(pnlKhusus);
 
         // Tombol Aksi Bawah
         JPanel pnlTombol = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
@@ -126,17 +147,37 @@ public class LaporBarangDialog extends JDialog {
         JButton btnBatal = UITheme.buatTombolOutline("Batal", UITheme.TEXT_MAIN);
         btnBatal.addActionListener(e -> dispose());
 
-        JButton btnSimpan = UITheme.buatTombol("Simpan Laporan Barang", UITheme.PRIMARY, Color.WHITE);
+        JButton btnSimpan = UITheme.buatTombol("Simpan Laporan (Status: TERSEDIA)", UITheme.CHARCOAL, Color.WHITE);
         btnSimpan.addActionListener(e -> simpanLaporan());
 
         pnlTombol.add(btnBatal);
         pnlTombol.add(btnSimpan);
 
+        JScrollPane scrollForm = new JScrollPane(cardForm);
+        scrollForm.setBorder(null);
+        scrollForm.setOpaque(false);
+        scrollForm.getViewport().setBackground(UITheme.BG_MAIN);
+        scrollForm.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollForm.getVerticalScrollBar().setUnitIncrement(16);
+
         contentPane.add(headerPanel, BorderLayout.NORTH);
-        contentPane.add(cardForm, BorderLayout.CENTER);
+        contentPane.add(scrollForm, BorderLayout.CENTER);
         contentPane.add(pnlTombol, BorderLayout.SOUTH);
 
         setContentPane(contentPane);
+    }
+
+    private void addRow(JPanel parent, JComponent comp, int gapAfter) {
+        comp.setAlignmentX(Component.LEFT_ALIGNMENT);
+        parent.add(comp);
+        parent.add(Box.createVerticalStrut(gapAfter));
+    }
+
+    private void addField(JPanel parent, JTextField field, int gapAfter) {
+        field.setMaximumSize(new Dimension(Integer.MAX_VALUE, 36));
+        field.setAlignmentX(Component.LEFT_ALIGNMENT);
+        parent.add(field);
+        parent.add(Box.createVerticalStrut(gapAfter));
     }
 
     private JLabel createFieldLabel(String text) {
@@ -148,12 +189,15 @@ public class LaporBarangDialog extends JDialog {
 
     private void updateFieldDinamis() {
         boolean dokumen = rbDokumen.isSelected();
+        lblKhususHeader.setText(dokumen
+                ? "BIDANG KHUSUS DOKUMEN (Atribut Rahasia Verifikasi)"
+                : "BIDANG KHUSUS ELEKTRONIK (Atribut Rahasia Verifikasi)");
         lblDetail1.setText(dokumen
-                ? "Nomor Identitas Dokumen (NIM/NIK/Plat) *"
-                : "Serial Number / IMEI (Bukti Rahasia) *");
+                ? "Nomor Identitas Dokumen (NIM / NIK / Plat) *"
+                : "Serial Number / IMEI (Rahasia) *");
         lblDetail2.setText(dokumen
                 ? "Nama Pemilik pada Dokumen *"
-                : "Brand / Merk & Model *");
+                : "Brand / Merk *");
     }
 
     private void simpanLaporan() {
