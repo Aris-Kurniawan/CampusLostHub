@@ -85,19 +85,19 @@ cd CampusLostHub
 
 # 2. Kompilasi seluruh file Java ke direktori bin/
 $files = Get-ChildItem -Path src -Recurse -Filter *.java | ForEach-Object { $_.FullName }
-javac -d bin -encoding UTF-8 $files
+javac -d out -encoding UTF-8 $files
 
 # 3. Jalankan aplikasi GUI Java Swing
-java -cp bin id.ac.pens.psdku.campuslosthub.Main
+java -cp out id.ac.pens.psdku.campuslosthub.Main
 ```
 
 #### Melalui Command Prompt (CMD) / Linux / macOS (Bash):
 ```bash
 # 1. Kompilasi semua file Java
-javac -d bin -encoding UTF-8 src/id/ac/pens/psdku/campuslosthub/*.java src/id/ac/pens/psdku/campuslosthub/*/*.java
+javac -d out -encoding UTF-8 src/id/ac/pens/psdku/campuslosthub/*.java src/id/ac/pens/psdku/campuslosthub/*/*.java
 
 # 2. Jalankan aplikasi GUI Java Swing
-java -cp bin id.ac.pens.psdku.campuslosthub.Main
+java -cp out id.ac.pens.psdku.campuslosthub.Main
 ```
 
 ---
@@ -105,7 +105,7 @@ java -cp bin id.ac.pens.psdku.campuslosthub.Main
 ### B. Menjalankan Mode Console / Terminal (CLI)
 Jika ingin menjalankan antarmuka alternatif berbasis Terminal / Console teks (misalnya untuk pengujian cepat CLI):
 ```bash
-java -cp bin id.ac.pens.psdku.campuslosthub.Main console
+java -cp out id.ac.pens.psdku.campuslosthub.Main console
 ```
 
 ---
